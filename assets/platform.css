@@ -26,3 +26,6 @@
 @media(max-width:520px){.relLinks{grid-template-columns:1fr}.factTable th{width:40%}}
 /* 출시 예정 */
 .price small{display:block;font-size:10px;color:#8b94a8;font-weight:700;text-align:right}
+/* 펫 궁합 해석 */
+.ownerLine{margin:10px 0 0;font-size:13px;color:#c3cad8;line-height:1.6}.ownerGuide{display:grid;gap:8px;margin:14px 0 10px}.ownerGuide p{margin:0;padding:11px 13px;border:1px solid #262c3d;border-radius:12px;background:#0e121a;font-size:13px;line-height:1.65;color:#c3cad8}.ownerGuide b{display:block;font-size:11px;color:#9fb8ff;margin-bottom:2px}
+.miniBars{margin:6px 0 4px}.miniBar{margin:12px 0}.miniBar>div:first-child{display:flex;justify-content:space-between;font-size:13px;color:#c3cad8}.miniBar b{color:#eef1f7}.miniBar .bar{height:8px;border-radius:999px;background:#252a3b;overflow:hidden;margin-top:6px}.miniBar .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#e6b9ff,#9fb7ff)}
