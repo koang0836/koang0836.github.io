@@ -49,20 +49,4 @@
     onScroll();
   }
 
-  /* 2단계에서 궁합 도구가 match.html 로 옮겨 가기 전까지, 홈의 궁합 도구(/#pair·#group·#pet)에서는 '궁합' 탭을 켠다 */
-  var TOOLS = { pair: 1, group: 1, pet: 1 };
-  function markTools() {
-    if (!/^\/(index\.html)?$/.test(location.pathname)) return;
-    var inTools = TOOLS[location.hash.slice(1)] === 1;
-    d.querySelectorAll('.yy-tab, .yy-desk a').forEach(function (a) {
-      var key = a.getAttribute('data-tab');
-      if (key === 'home') a.toggleAttribute('aria-current', !inTools);
-      if (key === 'match') a.toggleAttribute('aria-current', inTools);
-      if (a.hasAttribute('aria-current')) a.setAttribute('aria-current', 'page');
-    });
-    var t = d.querySelector('.yy-title');
-    if (t) t.textContent = inTools ? '궁합' : '연결운';
-  }
-  markTools();
-  window.addEventListener('hashchange', markTools);
 })();

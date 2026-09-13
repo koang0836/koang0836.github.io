@@ -206,7 +206,7 @@
       var href = a.getAttribute('href') || '';
       // 홈의 도구 탭은 /#pair 처럼 해시로 연결되므로 ?와 # 뒤를 모두 떼고 비교한다
       var path = href.split(/[?#]/)[0];
-      if (/^\/(index\.html)?$|^\/(today|love|cat|family|saju)(\.html)?$/.test(path)) {
+      if (/^\/(index\.html)?$|^\/(today|love|cat|family|saju|match)(\.html)?$/.test(path)) {
         track('백과에서도구이동', {
           출발: from.split('/')[1],
           도착: path.replace(/^\//, '').replace(/\.html$/, '') || 'home'
