@@ -204,10 +204,12 @@
       var isContent = /^\/(dream|encyclopedia|pet)\//.test(from);
       if (!isContent) return;
       var href = a.getAttribute('href') || '';
-      if (/^\/(index\.html)?$|^\/(today|love|cat|family|saju)(\.html)?$/.test(href.split('?')[0])) {
+      // 홈의 도구 탭은 /#pair 처럼 해시로 연결되므로 ?와 # 뒤를 모두 떼고 비교한다
+      var path = href.split(/[?#]/)[0];
+      if (/^\/(index\.html)?$|^\/(today|love|cat|family|saju)(\.html)?$/.test(path)) {
         track('백과에서도구이동', {
           출발: from.split('/')[1],
-          도착: href.replace(/^\//, '').replace(/\.html$/, '') || 'home'
+          도착: path.replace(/^\//, '').replace(/\.html$/, '') || 'home'
         });
       }
     } catch (err) { /* 측정 실패가 클릭을 막지 않는다 */ }
