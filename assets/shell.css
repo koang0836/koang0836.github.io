@@ -19,7 +19,8 @@ body{background:var(--yy-bg)!important;font-family:var(--yy-font);padding-bottom
 .yy-title{flex:1;min-width:0;margin:0;padding:0 8px;font-size:17px;font-weight:700;letter-spacing:-.02em;line-height:1.2;color:var(--yy-tx);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .yy-appbar[data-depth="0"] .yy-title{font-size:21px;padding-left:12px}
-.yy-back{width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:12px;color:var(--yy-tx)!important;text-decoration:none!important}
+.yy-back{width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:12px;color:var(--yy-tx)!important;text-decoration:none!important;
+  -webkit-appearance:none;appearance:none;background:transparent!important;border:0!important;padding:0!important;margin:0;min-width:0!important;box-shadow:none!important;cursor:pointer;font:inherit}
 .yy-back:active{background:var(--yy-card)}
 .yy-i{width:24px;height:24px;flex:none;display:block}
 .yy-desk{display:none}
@@ -105,3 +106,28 @@ html.yy-typing body{padding-bottom:0}
 .yy-card small{display:block;font-size:13px;color:var(--yy-sub);margin-top:3px;line-height:1.45}
 .yy-card:active{background:var(--yy-card2)}
 @media (min-width:900px){.yy-quick{grid-template-columns:repeat(8,minmax(0,1fr))}.yy-hscroll{margin:0 0 26px;padding:0 0 4px}}
+
+/* ── 결과 화면 (3단계 · shell.js openResult) ─────────────────────── */
+.yy-hid{display:none!important}
+html.yy-result .yy-tabbar{display:none}
+html.yy-result body{padding-bottom:calc(76px + var(--yy-safe))}
+html.yy-result [data-yy-result]{margin-top:8px!important}
+html.yy-result [data-yy-chip]{scroll-margin-top:calc(var(--yy-bar) + 60px + env(safe-area-inset-top,0px))}
+.yy-secbar{position:sticky;top:calc(var(--yy-bar) + env(safe-area-inset-top,0px));z-index:25;display:flex;gap:4px;overflow-x:auto;padding:8px 12px;
+  background:rgba(14,16,22,.94);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid var(--yy-line);
+  scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.yy-secbar::-webkit-scrollbar{display:none}
+.yy-secbar button{flex:0 0 auto;border:0;background:transparent;color:var(--yy-sub);font:inherit;font-family:var(--yy-font);font-size:14px;font-weight:600;padding:8px 13px;border-radius:999px;cursor:pointer;min-width:0;width:auto}
+.yy-secbar button.on{background:var(--yy-tx);color:var(--yy-bg)}
+.yy-actionbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;gap:8px;padding:10px 14px calc(10px + var(--yy-safe));
+  background:rgba(14,16,22,.94);-webkit-backdrop-filter:saturate(1.4) blur(16px);backdrop-filter:saturate(1.4) blur(16px);border-top:1px solid var(--yy-line)}
+html.yy-result .yy-actionbar{display:flex}
+html.yy-typing .yy-actionbar{display:none}
+.yy-actionbar>*{flex:1;height:52px;border-radius:15px;border:0;font-family:var(--yy-font);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;text-decoration:none!important;cursor:pointer;min-width:0;width:auto;padding:0 10px}
+.yy-act-sub{background:var(--yy-card);color:var(--yy-tx)!important}
+.yy-act-main{flex:1.5!important;background:var(--yy-ac);color:#fff!important}
+@media (min-width:900px){
+  .yy-secbar{top:60px;justify-content:center}
+  html.yy-result body{padding-bottom:88px}
+  .yy-actionbar{justify-content:center}.yy-actionbar>*{flex:0 0 220px}.yy-act-main{flex:0 0 260px!important}
+}

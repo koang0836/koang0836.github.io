@@ -187,7 +187,7 @@
     .expertBody{padding:0 8px 14px}
   }
 </style>
-<!--SHELL:head--><link rel="stylesheet" href="/assets/shell.css?v=edc9e62f"><script src="/assets/shell.js?v=d79c51cd" defer></script><!--/SHELL:head--></head>
+<!--SHELL:head--><link rel="stylesheet" href="/assets/shell.css?v=4ef38424"><script src="/assets/shell.js?v=16b58511" defer></script><!--/SHELL:head--></head>
 <body><!--SHELL:top--><header class="yy-appbar" data-depth="0"><div class="yy-appbar-in"><div class="yy-title">내 사주</div><nav class="yy-desk" aria-label="주요 메뉴"><a href="/" data-tab="home">홈</a><a href="/saju.html" data-tab="saju" aria-current="page">내 사주</a><a href="/match.html" data-tab="match">궁합</a><a href="/today.html" data-tab="today">오늘</a><a href="/menu.html" data-tab="menu">전체</a></nav></div></header><!--/SHELL:top-->
 <div class="site">
   
@@ -247,24 +247,24 @@
   <div id="formError" class="formError" role="alert"></div>
   <p class="privacy">입력값은 이 브라우저 안에서만 계산되고 서버로 보내지 않습니다. 주소창에도 남기지 않습니다.</p>
 
-  <main id="chartResult" class="result" aria-live="polite">
+  <main id="chartResult" class="result" aria-live="polite" data-yy-result data-yy-title="사주 풀이" data-yy-title-sel="#summaryBox h2" data-yy-next="궁합 보기|/match.html#pair">
     <div id="warnWrap" hidden>
       <div class="sectionTitle"><h2>확인해 주세요</h2><span>해당될 때만 표시</span></div>
       <div id="warnList" class="warnList"></div>
     </div>
 
-    <section id="summaryBox" class="card pad summary" style="margin-top:12px"></section>
+    <section id="summaryBox" data-yy-chip="요약" class="card pad summary" style="margin-top:12px"></section>
 
-    <div class="sectionTitle"><h2>분야별 풀이</h2><span>타고난 경향</span></div>
+    <div class="sectionTitle" data-yy-chip="분야별"><h2>분야별 풀이</h2><span>타고난 경향</span></div>
     <section id="topicGrid" class="topicGrid"></section>
 
-    <div class="sectionTitle"><h2 id="yearTitle">올해 운세</h2><span>상반기 · 하반기</span></div>
+    <div class="sectionTitle" data-yy-chip="올해"><h2 id="yearTitle">올해 운세</h2><span>상반기 · 하반기</span></div>
     <section id="yearBox" class="card pad"></section>
 
-    <div class="sectionTitle"><h2>앞으로 5년</h2><span>해마다 바뀌는 키워드</span></div>
+    <div class="sectionTitle" data-yy-chip="5년"><h2>앞으로 5년</h2><span>해마다 바뀌는 키워드</span></div>
     <section id="yearsBox" class="card pad"></section>
 
-    <div class="sectionTitle"><h2>지금 10년 흐름</h2><span>10년마다 바뀌는 큰 운</span></div>
+    <div class="sectionTitle" data-yy-chip="10년"><h2>지금 10년 흐름</h2><span>10년마다 바뀌는 큰 운</span></div>
     <section id="daeunEasyBox" class="card pad"></section>
 
     <div class="sectionTitle"><h2>더 깊은 풀이</h2><span>준비 중 · 보고 싶다는 분이 많은 것부터 만들어요</span></div>
@@ -286,7 +286,7 @@
       </button>
     </section>
 
-    <details id="expert" class="expert">
+    <details id="expert" class="expert" data-yy-chip="원국">
       <summary><b>사주 원국 자세히 보기</b><span>한자 원국표 · 십신 · 오행 개수 · 합충 · 대운표 — 사주를 공부한 분을 위한 전문 정보</span></summary>
       <div class="expertBody">
         <section class="card pad">
