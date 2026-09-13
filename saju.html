@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090b10">
+<title>무료 사주 풀이 · 성격 직업 돈 연애 올해 운세 | 연결운</title>
+<meta name="description" content="생년월일과 출생시간만 넣으면 타고난 성격, 일·돈·연애·결혼·사업·건강 경향과 올해 운세, 앞으로 5년과 10년 운 흐름을 쉬운 말로 풀어 드립니다. 사주 원국표·십신·합충 같은 전문 정보도 함께 볼 수 있고, 입력값은 브라우저 안에서만 계산됩니다.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/platform.css">
+<style>
+  /* 입력 */
+  .formCard{padding:22px}
+  .formGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 20px}
+  .field .hint{font-size:11px;color:#7f8799;margin-top:6px}
+  .calRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .seg{display:flex;gap:6px;flex-wrap:wrap}
+  .field .seg label,.seg label{display:flex;align-items:center;gap:7px;margin:0;padding:11px 15px;border:1px solid #30364a;border-radius:12px;background:#0b0e15;color:#cfd5e2;font-size:14px;cursor:pointer}
+  .seg label:has(input:checked){border-color:#8395d0;background:#161d33;color:#fff}
+  .field .check,.check{display:inline-flex;align-items:center;gap:7px;margin:0;font-size:13px;color:#b9c1d1;cursor:pointer}
+  .seg input,.check input{width:auto;margin:0;padding:0;accent-color:#b9a7ff}
+  .check input:disabled+span{color:#5d6578}
+  .dateRow{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+  .timeRow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+  input:disabled{opacity:.45}
+  .saveRow{margin-top:10px}
+  .formError{display:none;max-width:640px;margin:0 auto 14px;padding:12px 14px;border:1px solid #5a2f35;border-radius:12px;background:#1d1216;color:#ffb3ae;font-size:13px;text-align:center}
+  .formError.show{display:block}
+  .privacy{font-size:11px;color:#7f8799;text-align:center;margin:-4px 0 0}
+  a.btn{display:inline-block;text-align:center;text-decoration:none}
+
+  /* 쉬운 풀이 — 요약 */
+  .summary h2{margin:6px 0 2px;font-size:24px}
+  .typeLine{font-size:15px;color:#e6eaf3;font-weight:800;margin:2px 0 12px}
+  .easyP{font-size:14px;line-height:1.8;color:#c9d0de;margin:12px 0}
+  .goodCare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+  .goodCare div{padding:11px 13px;border:1px solid #262d3e;border-radius:12px;background:#0f131c;font-size:13px;color:#c9d0de;line-height:1.6}
+  .goodCare b{display:block;font-size:11px;color:#9fb8ff;margin-bottom:3px}
+  .gbar{display:grid;grid-template-columns:128px 1fr 22px;gap:10px;align-items:center;margin:9px 0;font-size:13px;font-weight:800;color:#e6eaf3}
+  .gbar small{display:block;font-size:10px;color:#7f8799;font-weight:400}
+  .gbar .track{margin:0;height:10px}
+  .gbar .fillG{height:100%;border-radius:999px;background:linear-gradient(90deg,#e6b9ff,#9fb7ff)}
+  .gbar b{text-align:right}
+
+  /* 쉬운 풀이 — 분야 카드 */
+  .topicGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .topic{padding:18px;border:1px solid #262d3e;border-radius:18px;background:#10141d}
+  .topicHead{display:flex;gap:12px;align-items:center;margin-bottom:4px}
+  .ticon{font-size:26px;line-height:1}
+  .tlabel{font-size:11px;color:#8b94a8;font-weight:800;letter-spacing:.04em}
+  .topic h3{margin:2px 0 0;font-size:17px}
+  .topic p{font-size:13.5px;line-height:1.75;color:#c3cad8;margin:9px 0}
+  .topic .fit{color:#9fb8ff;font-weight:800}
+  .topic p.tnote{font-size:11px;color:#7f8799;line-height:1.6}
+
+  /* 쉬운 풀이 — 올해 · 5년 · 10년 */
+  .kw{display:inline-block;padding:4px 11px;border-radius:999px;background:#1a2033;color:#dfe6ff;font-size:13px;font-weight:800;margin:8px 6px 0 0}
+  .flowTable{margin-top:14px}
+  .flowRow{display:grid;grid-template-columns:72px 1fr 1fr;gap:12px;padding:12px 0;border-top:1px solid #222838;font-size:13px;line-height:1.7;color:#c3cad8}
+  .flowRow.single{grid-template-columns:72px 1fr}
+  .flowRow>b{color:#eef1f7}
+  .flowRow small{display:block;font-size:10px;color:#8b94a8;font-weight:800}
+  .yearStrip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .yc{padding:12px 8px;border:1px solid #262d3e;border-radius:14px;background:#0f131c;text-align:center}
+  .yc.now{border-color:#9fb8ff;background:#141c33}
+  .yc .yy{font-size:11px;color:#8b94a8;font-weight:800}
+  .yc .yg{font-size:16px;font-weight:900;margin:4px 0}
+  .yc .yk{font-size:12px;color:#c9d0de}
+  .tagList{margin-top:12px}
+  .tagRow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #222838;font-size:13px;color:#c3cad8}
+  .tagRow b{color:#eef1f7;white-space:nowrap}
+  .tagRow b.none{color:#6f788d;font-weight:400}
+
+  /* 잠금 카드 (유료 의향 측정 — 콘텐츠 없음) */
+  .lockGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .lockCard{display:flex;flex-direction:column;gap:6px;text-align:left;padding:16px;border:1px solid #363d53;border-radius:16px;background:linear-gradient(160deg,#171d31,#0e1219);color:#eef1f7;cursor:pointer;font:inherit}
+  .lockCard:hover{border-color:#9fb8ff}
+  .lockTop{font-size:11px;color:#b9a7ff;font-weight:800}
+  .lockCard b{font-size:16px}
+  .lockDesc{font-size:12px;color:#9ca4b8;line-height:1.6}
+  .lockCard em{font-style:normal;font-size:12px;color:#ffd79c;font-weight:800;margin-top:auto;padding-top:6px}
+
+  /* 전문가용 — 접어 둔다 */
+  .expert{margin-top:28px;border:1px solid #262d3e;border-radius:18px;background:#0c0f16}
+  .expert>summary{cursor:pointer;padding:18px 20px;list-style:none;display:flex;flex-direction:column;gap:4px}
+  .expert>summary::-webkit-details-marker{display:none}
+  .expert>summary b{font-size:16px}
+  .expert>summary b::after{content:' 펼치기 ▾';font-size:12px;color:#8b94a8;font-weight:400}
+  .expert[open]>summary b::after{content:' 접기 ▴'}
+  .expert>summary span{font-size:12px;color:#7f8799}
+  .expertBody{padding:0 14px 18px}
+
+  /* 원국표 */
+  .chartHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+  .chartHead h2{margin:4px 0 2px;font-size:22px}
+  .chartHead .btn{min-width:auto;padding:9px 14px;font-size:12px}
+  .chartGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .pcol{border:1px solid #262d3e;border-radius:16px;background:#0f131c;padding:14px 8px;text-align:center}
+  .pcol.me{border-color:#5b6aa6;background:#131a2d}
+  .pcol.unknown{border-style:dashed;display:flex;flex-direction:column;justify-content:center;color:#6f788d}
+  .plabel{font-size:11px;color:#8b94a8;font-weight:800;letter-spacing:.06em}
+  .pcol.me .plabel::after{content:' · 나';color:#9fb8ff}
+  .glyph{font-size:44px;font-weight:900;line-height:1.15;margin-top:8px}
+  .god{font-size:12px;color:#d3d9e6;font-weight:800}
+  .etag{font-size:10px;color:#7f8799}
+  .hideRow{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid #222838}
+  .hid{font-size:11px;padding:3px 7px;border-radius:999px;background:#161b28;border:1px solid #2a3145;color:#b3bbcc;white-space:nowrap}
+  .hid small{color:#6f788d}
+  .stage{margin-top:9px;font-size:13px;color:#d3d9e6;font-weight:700}
+  .stage small,.nayinTag{display:block;font-size:10px;color:#7f8799;font-weight:400}
+  .e-목{color:#8fd6a0}.e-화{color:#ff9f9a}.e-토{color:#e8c27a}.e-금{color:#dfe3ee}.e-수{color:#8fb4ff}
+  .b-목{background:#8fd6a0}.b-화{background:#ff9f9a}.b-토{background:#e8c27a}.b-금{background:#cfd5e2}.b-수{background:#8fb4ff}
+  .glossary{margin-top:14px}
+  .glossary dl{margin:12px 0 14px;font-size:13px;color:#a8b1c3}
+  .glossary dt{color:#d3d9e6;font-weight:800;margin-top:8px}
+  .glossary dd{margin:2px 0 0}
+
+  /* 경고 */
+  .warnList{display:grid;gap:8px}
+  .warnItem{padding:13px 16px;border:1px solid #4a4128;border-left:3px solid var(--y);border-radius:12px;background:#17150f;color:#e7dcc0;font-size:13px}
+  .warnItem b{color:#ffd79c}
+
+  /* 오행 */
+  .elemBox h3{margin:0 0 2px;font-size:15px}
+  .sub,.caveat{font-size:11px;color:#7f8799}
+  .sub{margin-bottom:10px}
+  .ebar{display:grid;grid-template-columns:30px 1fr 26px;gap:10px;align-items:center;margin:8px 0;font-size:13px;font-weight:800}
+  .ebar .track{margin:0;height:10px}
+  .ebar .fillE{height:100%;border-radius:999px}
+  .ebar b{text-align:right;color:#eef1f7}
+  .moreBox h3{margin:0 0 6px;font-size:15px}
+  .moreBox h3+p{margin-top:0}
+  .balRow{display:grid;grid-template-columns:90px 1fr auto;gap:10px;align-items:center;font-size:12px;color:#b9c1d1;margin:8px 0}
+  .balBar{height:10px;border-radius:999px;background:#252a3b;overflow:hidden;display:flex}
+  .balBar i{display:block;height:100%}
+
+  /* 관계 */
+  .relItem{display:grid;grid-template-columns:62px 1fr;gap:3px 12px;padding:13px 18px;border-bottom:1px solid #222838}
+  .relItem:last-child{border-bottom:0}
+  .relType{font-size:11px;font-weight:900;padding:4px 0;border-radius:999px;background:#1a2033;color:#c3cdf0;text-align:center;align-self:start}
+  .relType.tense{background:#2a1c20;color:#ffb3ae}
+  .relMain{font-size:16px;font-weight:900}
+  .relMain .res{font-size:13px;margin-left:6px}
+  .relMain .etag{margin-left:8px;font-weight:400}
+  .relDesc{grid-column:2;font-size:12px;color:#9ca4b8}
+
+  /* 일주 · 세운 */
+  .headLine{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .headLine h3{margin:0;font-size:24px}
+  .factLine{font-size:13px;color:#b9c1d1;margin:9px 0}
+
+  /* 대운 */
+  .timeline{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 12px;-webkit-overflow-scrolling:touch}
+  .dy{position:relative;flex:0 0 112px;border:1px solid #262d3e;border-radius:14px;background:#0f131c;padding:12px 8px;text-align:center}
+  .dy.now{border-color:#9fb8ff;background:#141c33;box-shadow:0 0 0 1px #9fb8ff55}
+  .dy .yr{font-size:11px;color:#8b94a8}
+  .dy .gz{font-size:28px;font-weight:900;margin:4px 0}
+  .dy .gd{font-size:11px;color:#b3bbcc}
+  .dy .age{font-size:10px;color:#7f8799;margin-top:4px}
+  /* '지금' 표시는 카드 위에 겹쳐 올려 카드 높이를 바꾸지 않는다 */
+  .nowTag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:900;color:#11141c;background:#9fb8ff;border-radius:999px;padding:1px 8px;white-space:nowrap}
+
+  /* 잠금 카드 안내 창 */
+  .modalBack{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
+  .modalBack.show{display:flex}
+  .modal{width:min(100%,520px);padding:22px;background:#151a26;border:1px solid #363d53;border-radius:22px;box-shadow:0 30px 90px #000b}
+  .modalTop{display:flex;justify-content:space-between;gap:10px;align-items:start}
+  .modal h2{margin:0 0 7px;font-size:20px}
+  .modal p{color:#9ca4b8;font-size:13px;line-height:1.65;margin:0}
+  .modal .close{border:1px solid #363d53;background:transparent;color:#b9c1d1;border-radius:10px;padding:7px 11px;cursor:pointer;white-space:nowrap;font:inherit;font-size:12px}
+  .premiumList{margin:14px 0;padding-left:18px;color:#c9d0de;font-size:13px;line-height:1.8}
+  .priceLine{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .priceLine b{font-size:22px;color:#ffd79c}
+  .priceLine span{font-size:12px;color:#7f8799}
+  .demoPay{width:100%;border:0;background:linear-gradient(135deg,#e6b9ff,#9fb7ff);color:#11141c;border-radius:12px;padding:13px;font-weight:900;cursor:pointer;font:inherit;font-weight:900;font-size:14px}
+  .modal p.legalMini{font-size:11px;color:#6f788d;margin-top:10px}
+
+  @media(max-width:820px){.formGrid,.topicGrid,.lockGrid{grid-template-columns:1fr}}
+  @media(max-width:520px){
+    .chartGrid{gap:5px}.pcol{padding:10px 3px;border-radius:12px}.glyph{font-size:30px}
+    .god{font-size:10px}.hid{font-size:9px;padding:2px 5px}.stage{font-size:11px}
+    .chartHead{flex-direction:column}.balRow{grid-template-columns:70px 1fr;}.balRow span:last-child{grid-column:2}
+    .relItem{grid-template-columns:52px 1fr;padding:12px 14px}
+    .goodCare{grid-template-columns:1fr}.gbar{grid-template-columns:100px 1fr 18px}
+    .flowRow,.flowRow.single{grid-template-columns:1fr;gap:4px}
+    .yearStrip{display:flex;overflow-x:auto;padding-bottom:4px}.yc{flex:0 0 104px}
+    .expertBody{padding:0 8px 14px}
+  }
+</style>
+</head>
+<body>
+<div class="site">
+  <div class="nav">
+    <a class="logo" href="/">YEONGYEOL · 연결운</a>
+    <div class="navlinks">
+      <a href="/today.html">오늘운</a><a href="/saju.html">사주 원국</a><a href="/love.html">연애실험실</a><a href="/family.html">우리집 관계도</a>
+      <a href="/cat.html">CAT DNA</a><a href="/dream/">꿈해몽</a><a href="/encyclopedia/">60갑자</a>
+      <a href="/pet/dog/">견종백과</a><a href="/pet/cat/">묘종백과</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="eyebrow">FREE SAJU · 쉬운 사주 풀이</div>
+    <h1>내 사주, 쉽게 풀어 보기</h1>
+    <p>생년월일과 태어난 시간만 넣으면 타고난 성격과 일·돈·연애·결혼·사업·건강 경향, 올해 운세와 10년 흐름을 쉬운 말로 알려 드려요. 한자와 전문 용어는 맨 아래 ‘사주 원국 자세히 보기’에 모아 두었어요.</p>
+    <div class="badgeRow">
+      <span class="badge">한자 몰라도 OK</span><span class="badge">음력·윤달 입력</span>
+      <span class="badge">브라우저 안에서만 계산</span><span class="badge">무료</span>
+    </div>
+  </section>
+
+  <section class="card formCard">
+    <div class="formGrid">
+      <div class="field">
+        <label>달력</label>
+        <div class="calRow">
+          <div class="seg">
+            <label><input type="radio" name="cal" value="solar" checked> 양력</label>
+            <label><input type="radio" name="cal" value="lunar"> 음력</label>
+          </div>
+          <label class="check"><input type="checkbox" id="leap" disabled><span>윤달</span></label>
+        </div>
+        <div class="hint">음력 생일이면 음력을, 윤달에 태어났다면 윤달까지 체크하세요.</div>
+      </div>
+      <div class="field">
+        <label>성별</label>
+        <div class="seg">
+          <label><input type="radio" name="gender" value="F" checked> 여성</label>
+          <label><input type="radio" name="gender" value="M"> 남성</label>
+        </div>
+        <div class="hint">10년 운이 흐르는 방향을 계산할 때만 씁니다. 풀이 문장은 성별에 따라 달라지지 않습니다.</div>
+      </div>
+      <div class="field">
+        <label for="by">생년월일</label>
+        <div class="dateRow">
+          <select id="by" aria-label="년"></select>
+          <select id="bm" aria-label="월"></select>
+          <select id="bd" aria-label="일"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="birthTime">출생시간</label>
+        <div class="timeRow">
+          <input id="birthTime" type="time" value="12:00">
+          <label class="check"><input type="checkbox" id="timeUnknown"><span>모름</span></label>
+        </div>
+        <div class="hint">모르면 ‘모름’에 체크하세요. 태어난 시간 글자를 비워 두고 계산합니다.</div>
+      </div>
+    </div>
+    <div class="saveRow"><label class="check"><input type="checkbox" id="saveLocal"><span>이 기기에 입력값 저장</span></label></div>
+  </section>
+
+  <div class="actions"><button class="btn" onclick="runChart()">내 사주 풀이 보기</button></div>
+  <div id="formError" class="formError" role="alert"></div>
+  <p class="privacy">입력값은 이 브라우저 안에서만 계산되고 서버로 보내지 않습니다. 주소창에도 남기지 않습니다.</p>
+
+  <main id="chartResult" class="result" aria-live="polite">
+    <div id="warnWrap" hidden>
+      <div class="sectionTitle"><h2>확인해 주세요</h2><span>해당될 때만 표시</span></div>
+      <div id="warnList" class="warnList"></div>
+    </div>
+
+    <section id="summaryBox" class="card pad summary" style="margin-top:12px"></section>
+
+    <div class="sectionTitle"><h2>분야별 풀이</h2><span>타고난 경향</span></div>
+    <section id="topicGrid" class="topicGrid"></section>
+
+    <div class="sectionTitle"><h2 id="yearTitle">올해 운세</h2><span>상반기 · 하반기</span></div>
+    <section id="yearBox" class="card pad"></section>
+
+    <div class="sectionTitle"><h2>앞으로 5년</h2><span>해마다 바뀌는 키워드</span></div>
+    <section id="yearsBox" class="card pad"></section>
+
+    <div class="sectionTitle"><h2>지금 10년 흐름</h2><span>10년마다 바뀌는 큰 운</span></div>
+    <section id="daeunEasyBox" class="card pad"></section>
+
+    <div class="sectionTitle"><h2>더 깊은 풀이</h2><span>준비 중 · 보고 싶다는 분이 많은 것부터 만들어요</span></div>
+    <section class="lockGrid">
+      <button class="lockCard" onclick="openPremium('chart_year')">
+        <span class="lockTop">🔒 준비 중</span><b><span id="lockYear">올해</span> 월별 운세</b>
+        <span class="lockDesc">열두 달 흐름 · 달마다 일·돈·연애·컨디션 한 줄 · 움직이기 좋은 달과 쉬어 가면 좋은 달</span>
+        <em>출시 예정가 ₩2,900</em>
+      </button>
+      <button class="lockCard" onclick="openPremium('chart_daeun')">
+        <span class="lockTop">🔒 준비 중</span><b>10년 운 자세히</b>
+        <span class="lockDesc">지금 10년을 해마다 나눈 흐름 · 다음 10년 미리보기 · 흐름이 바뀌는 시점</span>
+        <em>출시 예정가 ₩2,900</em>
+      </button>
+      <button class="lockCard" onclick="openPremium('chart_deep')">
+        <span class="lockTop">🔒 준비 중</span><b>평생 심층 리포트</b>
+        <span class="lockDesc">타고난 직업 적성 · 돈 관리 전략 · 인연이 가까워지기 쉬운 시기 · 사주 구조 전체 해설</span>
+        <em>출시 예정가 ₩4,900</em>
+      </button>
+    </section>
+
+    <details id="expert" class="expert">
+      <summary><b>사주 원국 자세히 보기</b><span>한자 원국표 · 십신 · 오행 개수 · 합충 · 대운표 — 사주를 공부한 분을 위한 전문 정보</span></summary>
+      <div class="expertBody">
+        <section class="card pad">
+          <div class="chartHead">
+            <div>
+              <div class="eyebrow">SAJU CHART</div>
+              <h2 id="chartTitle"></h2>
+              <div id="chartSub" class="etag"></div>
+            </div>
+            <button id="hangulBtn" class="btn ghost" onclick="toggleHangul()">한자로 보기</button>
+          </div>
+          <div id="chartGrid" class="chartGrid"></div>
+          <div class="faq glossary">
+            <details>
+              <summary>용어 설명 — 십신 · 지장간 · 십이운성 · 납음 · 공망</summary>
+              <dl>
+                <dt>천간 · 지지</dt><dd>각 기둥의 위 글자가 천간, 아래 글자가 지지입니다. 년·월·일·시 네 기둥의 여덟 글자를 원국이라 부릅니다.</dd>
+                <dt>십신</dt><dd>일간(일주의 천간, 나)을 기준으로 다른 글자와의 관계에 붙인 이름입니다. 같은 오행은 비견·겁재, 내가 생하는 오행은 식신·상관, 내가 극하는 오행은 편재·정재, 나를 극하는 오행은 편관·정관, 나를 생하는 오행은 편인·정인입니다. 위의 쉬운 풀이에서는 이 다섯 묶음을 나다움·표현·현실·책임·배움의 힘이라고 불렀습니다.</dd>
+                <dt>지장간</dt><dd>지지 속에 숨은 천간입니다. 여기·중기·정기 순이며 정기의 비중이 가장 큽니다. 지지 아래 적힌 십신은 정기 기준입니다.</dd>
+                <dt>십이운성</dt><dd>일간의 기운이 각 지지에서 어느 단계에 있는지를 12칸으로 나눈 척도입니다. 강약 점수가 아니라 힘을 쓰는 방식에 가깝습니다.</dd>
+                <dt>납음</dt><dd>60갑자를 둘씩 묶어 오행 이름을 붙인 별도 체계로, 보조로 참고합니다.</dd>
+                <dt>공망</dt><dd>일주가 속한 순(旬)에서 비어 있는 두 지지입니다. 나쁜 것으로 단정하지 않습니다.</dd>
+              </dl>
+            </details>
+          </div>
+        </section>
+
+        <div class="sectionTitle"><h2>오행 분포</h2><span>가중치 없이 개수만</span></div>
+        <section class="grid2">
+          <div id="elemSurface" class="card pad elemBox"></div>
+          <div id="elemHidden" class="card pad elemBox"></div>
+        </section>
+        <section id="elemMore" class="card pad moreBox" style="margin-top:12px"></section>
+
+        <div class="sectionTitle"><h2>원국 안의 관계</h2><span>합 · 충 · 형 · 해 · 파 · 공망</span></div>
+        <section id="relList" class="card"></section>
+
+        <div class="sectionTitle"><h2>일주 요약</h2><span>나를 나타내는 두 글자</span></div>
+        <section id="iljuBox" class="card pad"></section>
+
+        <div class="sectionTitle"><h2>세운</h2><span>입춘 기준</span></div>
+        <section id="seunBox" class="card pad"></section>
+
+        <div class="sectionTitle"><h2>대운 흐름</h2><span>10년 단위</span></div>
+        <section id="daeunBox" class="card pad"></section>
+      </div>
+    </details>
+
+    <div class="sectionTitle"><h2>공유</h2><span>생년월일은 담지 않습니다</span></div>
+    <section class="card pad" style="text-align:center">
+      <p class="caveat" style="margin:0 0 12px">카드에는 일주와 한 줄 캐릭터, 오행 분포만 들어갑니다. 생년월일·출생시간·원국 여덟 글자는 넣지 않습니다.</p>
+      <button class="btn" onclick="downloadChartCard()">4:5 공유 카드 저장</button>
+    </section>
+
+    <div class="ad-shell" data-ad-placement="chartResult" hidden></div>
+    <div class="notice">원국 계산은 절기 시각 기준 만세력 라이브러리와 연결운 규칙표로 이뤄지며, 풀이는 명리학의 여러 관점을 단순화한 오락·참고용 콘텐츠입니다. 미래·건강·재정·관계 결정을 대신하지 않으며, 건강 관련 문장은 생활 습관 참고용일 뿐 의학적 판단이 아닙니다.</div>
+  </main>
+
+  <div id="premiumModal" class="modalBack" onclick="closePremium(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="premiumTitle">
+      <div class="modalTop">
+        <div><h2 id="premiumTitle"></h2><p id="premiumDesc"></p></div>
+        <button class="close" onclick="closePremium()">닫기</button>
+      </div>
+      <ul id="premiumList" class="premiumList"></ul>
+      <div class="priceLine"><b id="premiumPrice"></b><span>출시 예정가 · 아직 판매하지 않아요</span></div>
+      <button class="demoPay" onclick="demoPay()">이 리포트가 나오면 보고 싶어요</button>
+      <p class="legalMini">결제 정보는 받지 않습니다. 버튼을 누른 횟수는 어떤 리포트를 먼저 만들지 정하는 데만 참고하며, 생년월일이나 사주 내용은 보내지 않습니다.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footerlinks"><a href="/">홈</a><a href="/about.html">서비스 소개</a><a href="/privacy.html">개인정보처리방침</a><a href="/terms.html">이용약관</a></div>
+    연결운 · 결과는 오락·참고용이며 미래나 관계를 확정적으로 예측하지 않습니다.
+  </div>
+</div>
+
+<script src="/assets/vendor/lunar.min.js"></script>
+<script src="/assets/platform.js"></script>
+<script src="/assets/saju_data.js"></script>
+<script src="/assets/chart.js"></script>
+<script src="/config.js"></script>
+<script>
+(function () {
+  'use strict';
+  var D = window.YY_SAJU_DATA || {};
+  var E = D.easy || {};
+  var STORE = 'yeongyeol.chart.v1';
+  /* 전통 표기처럼 오른쪽이 년주가 되도록 왼쪽부터 시·일·월·년 */
+  var POS_VIEW = ['time', 'day', 'month', 'year'];
+  var POS_LABEL = { time: '시주', day: '일주', month: '월주', year: '년주' };
+  var ELEMS = ['목', '화', '토', '금', '수'];
+  var GROUPS = ['비겁', '식상', '재성', '관성', '인성'];
+  var HEX = { 목: '#8fd6a0', 화: '#ff9f9a', 토: '#e8c27a', 금: '#dfe3ee', 수: '#8fb4ff' };
+  var REL_ORDER = ['삼합', '방합', '반합', '천간합', '육합', '천간충', '충', '삼형', '형', '자형', '해', '파'];
+  var TENSE = { 천간충: 1, 충: 1, 삼형: 1, 형: 1, 자형: 1, 해: 1, 파: 1 };
+  /* 관계 종류의 뜻. 조합별 해설(chart_text.py)이 없을 때만 쓴다 — 흉으로 단정하지 않는다 */
+  var REL_DESC = {
+    천간합: '두 천간이 서로 끌어당겨 한 방향으로 묶이는 관계',
+    천간충: '두 천간의 방향이 정면으로 마주치는 관계',
+    육합: '두 지지가 짝을 이뤄 가까워지는 관계',
+    충: '마주 보는 두 지지가 부딪히며 움직임이 생기는 관계',
+    형: '서로 다듬고 조율해야 할 긴장이 걸린 관계',
+    삼형: '세 글자가 모여 조율할 과제가 커지는 관계',
+    자형: '같은 글자가 겹쳐 스스로 긴장이 쌓이기 쉬운 관계',
+    해: '가까워지려다 어긋나기 쉬운 관계',
+    파: '짜인 흐름이 한 번 흐트러지는 관계',
+    삼합: '세 지지가 한 오행으로 모이는 관계',
+    반합: '삼합 중 두 글자가 모여 한 오행 쪽으로 기우는 관계',
+    방합: '같은 계절의 세 지지가 모여 한 오행이 두터워지는 관계'
+  };
+  /* 잠금 카드 — 콘텐츠는 아직 없다. 어느 상품이 눌리는지만 잰다(설계서 4-3절) */
+  var PRODUCTS = {
+    chart_year: {
+      title: '월별 운세 리포트', price: '₩2,900',
+      desc: '한 해 열두 달의 흐름을 달마다 풀어 드리는 리포트예요.',
+      items: ['달마다 일·돈·연애·컨디션 한 줄', '움직이기 좋은 달과 쉬어 가면 좋은 달', '그해 기운이 내 사주와 부딪히거나 어울리는 시기']
+    },
+    chart_daeun: {
+      title: '10년 운 리포트', price: '₩2,900',
+      desc: '지금 지나는 10년을 해마다 나눠 자세히 풀어 드리는 리포트예요.',
+      items: ['지금 10년의 해마다 흐름', '다음 10년 미리보기와 준비하면 좋은 것', '일·돈·관계에서 흐름이 바뀌는 시점']
+    },
+    chart_deep: {
+      title: '평생 심층 리포트', price: '₩4,900',
+      desc: '타고난 사주 구조 전체를 분야별로 깊게 풀어 드리는 리포트예요.',
+      items: ['타고난 직업 적성과 일하는 방식', '돈 관리 전략과 조심할 습관', '인연이 가까워지기 쉬운 시기와 잘 맞는 사람', '사주 구조 전체 해설']
+    }
+  };
+  var genFrom = {};
+  Object.keys(D.gen || {}).forEach(function (k) { genFrom[D.gen[k]] = k; });
+
+  /* 한자를 모르는 분이 많아 한글 보기가 기본이다 */
+  var hangul = true, last = null;
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function pad(n) { n = +n; return (n < 10 ? '0' : '') + n; }
+  function ko(c) { return (D.stemKo && D.stemKo[c]) || (D.branchKo && D.branchKo[c]) || c; }
+  function ch(c) { return hangul ? ko(c) : c; }
+  function gz(s) { return s ? s.split('').map(ch).join('') : ''; }
+  function koName(s) { return s ? s.split('').map(ko).join('') : ''; }
+  /* 한글 보기일 때 해설 문장 속 간지 한자도 독음으로 바꾼다 */
+  function txt(s) { return hangul ? String(s).replace(/[一-鿿]/g, ko) : s; }
+  function glyphs(s) {
+    return s.split('').map(function (c) {
+      var el = D.stemElem[c] || D.branchElem[c];
+      return '<span class="e-' + el + '">' + ch(c) + '</span>';
+    }).join('');
+  }
+
+  function showError(msg) { $('formError').textContent = msg; $('formError').classList.add('show'); }
+  function hideError() { $('formError').classList.remove('show'); }
+
+  /* ── 입력 ─────────────────────────────────────────────────── */
+  function fillSelect(el, from, to, suffix, selected) {
+    var html = '';
+    for (var v = from; v <= to; v++) html += '<option value="' + v + '"' + (v === selected ? ' selected' : '') + '>' + v + suffix + '</option>';
+    el.innerHTML = html;
+  }
+  function checked(name) { return document.querySelector('input[name="' + name + '"]:checked').value; }
+  function setChecked(name, value) {
+    var el = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+    if (el) el.checked = true;
+  }
+  function sync() {
+    var lunar = checked('cal') === 'lunar';
+    $('leap').disabled = !lunar;
+    if (!lunar) $('leap').checked = false;
+    $('birthTime').disabled = $('timeUnknown').checked;
+  }
+  function readInput() {
+    var cal = checked('cal');
+    return {
+      calendar: cal,
+      leap: cal === 'lunar' && $('leap').checked,
+      date: $('by').value + '-' + pad($('bm').value) + '-' + pad($('bd').value),
+      time: $('timeUnknown').checked ? '' : $('birthTime').value,
+      gender: checked('gender')
+    };
+  }
+  function persist(input) {
+    try {
+      if (!$('saveLocal').checked) { localStorage.removeItem(STORE); return; }
+      localStorage.setItem(STORE, JSON.stringify({
+        calendar: input.calendar, leap: input.leap, date: input.date,
+        time: $('birthTime').value, unknown: $('timeUnknown').checked, gender: input.gender
+      }));
+    } catch (e) { /* 저장소를 못 쓰는 환경이면 조용히 넘어간다 */ }
+  }
+  function restore() {
+    try {
+      var s = JSON.parse(localStorage.getItem(STORE) || 'null');
+      if (!s) return;
+      var p = String(s.date || '').split('-');
+      if (p.length === 3) { $('by').value = +p[0]; $('bm').value = +p[1]; $('bd').value = +p[2]; }
+      setChecked('cal', s.calendar);
+      setChecked('gender', s.gender);
+      $('leap').checked = !!s.leap;
+      if (s.time) $('birthTime').value = s.time;
+      $('timeUnknown').checked = !!s.unknown;
+      $('saveLocal').checked = true;
+    } catch (e) { /* 손상된 저장값은 무시 */ }
+  }
+
+  /* ── 쉬운 풀이 (easy_text.py 문안 · chart.js reading 이 고른 키) ── */
+  function renderSummary(c) {
+    var r = c.reading, t = E.dayType[c.dayMaster.stem], d = c.pillars.day, max = 1;
+    GROUPS.forEach(function (g) { max = Math.max(max, r.groups[g]); });
+    var bars = GROUPS.map(function (g) {
+      var L = E.groupLabel[g];
+      return '<div class="gbar"><span>' + L.name + '<small>' + L.sub + '</small></span><div class="track"><div class="fillG" style="width:' +
+        (r.groups[g] / max * 100) + '%"></div></div><b>' + r.groups[g] + '</b></div>';
+    }).join('');
+    $('summaryBox').innerHTML =
+      '<div class="eyebrow">나는 어떤 사람일까</div>' +
+      '<h2>' + koName(d) + '일주 · ' + t.name + ' 타입</h2>' +
+      '<div class="typeLine">' + t.title + '</div>' +
+      '<div class="callout">' + esc(D.iljuCharacter[d]) + '</div>' +
+      '<p class="easyP">' + t.body + '</p>' +
+      '<div class="goodCare"><div><b>강점</b>' + t.good + '</div><div><b>조심할 점</b>' + t.care + '</div></div>' +
+      '<h3 style="margin:20px 0 4px;font-size:15px">나를 움직이는 다섯 가지 힘</h3>' +
+      '<p class="caveat" style="margin:0 0 6px">' + E.note.groups.replace('{n}', r.counted) + ' 가장 큰 힘은 <b>' + E.groupLabel[r.main].name + '</b>이에요.</p>' +
+      bars;
+  }
+
+  function topic(icon, label, title, paras, foot) {
+    return '<article class="topic"><div class="topicHead"><span class="ticon">' + icon + '</span><div><div class="tlabel">' + label +
+      '</div><h3>' + title + '</h3></div></div>' +
+      paras.filter(Boolean).map(function (p) { return '<p>' + p + '</p>'; }).join('') +
+      (foot ? '<p class="tnote">' + foot + '</p>' : '') + '</article>';
+  }
+
+  function renderTopics(c) {
+    var r = c.reading, M = E.money;
+    var w = E.work.type[r.work.type], lv = M.level[r.money.level], st = r.money.style ? M.style[r.money.style] : null;
+    var love = E.love.style[r.love.style], pt = E.partner.style[r.partner.style];
+    var biz = E.business.kind[r.business.kind], hb = E.health.base[r.health.base];
+    function pick(table) { return function (k) { return table[k]; }; }
+    $('topicGrid').innerHTML = [
+      topic('💼', '일 · 직장', w.title, [w.body, E.work.duty[r.work.duty], '<span class="fit">잘 맞는 분야</span> · ' + w.fit, w.tip]),
+      topic('💰', '돈 · 재물', st ? st.title : lv.title, [lv.body, st && st.body].concat(r.money.flags.map(pick(M.flag)))),
+      topic('💕', '연애', love.title, [love.body, r.love.charm && E.love.charm[r.love.charm], r.love.express && E.love.express[r.love.express]]),
+      topic('💍', '결혼 · 파트너', pt.title, [pt.body].concat(r.partner.rel.map(pick(E.partner.rel)))),
+      topic('🚀', '사업 · 창업', biz.title, [biz.body].concat(r.business.watch.map(pick(E.business.watch)))),
+      topic('🌿', '건강 · 컨디션', hb.title, [hb.body].concat(r.health.many.map(pick(E.health.many)), r.health.none.map(pick(E.health.none)),
+        r.health.tense ? [E.health.tense] : []), E.health.note)
+    ].join('');
+  }
+
+  var FLOW_TOPICS = [['work', '💼 일'], ['money', '💰 돈'], ['love', '💕 연애'], ['health', '🌿 건강']];
+  function kwHTML(a, b) {
+    return '<div><span class="kw">#' + E.flow[a].keyword + '</span>' + (a !== b ? '<span class="kw">#' + E.flow[b].keyword + '</span>' : '') + '</div>';
+  }
+  function summaryOf(a, b) { return E.flow[a].summary + (a !== b ? ' ' + E.flow[b].summary : ''); }
+  /* 앞 글자(천간)와 뒤 글자(지지)의 흐름을 분야별로 나란히. 같은 십신이면 한 칸 */
+  function flowHTML(a, b, colA, colB) {
+    var same = a === b;
+    return '<div class="flowTable">' + FLOW_TOPICS.map(function (t) {
+      return '<div class="flowRow' + (same ? ' single' : '') + '"><b>' + t[1] + '</b>' +
+        (same ? '<span>' + E.flow[a][t[0]] + '</span>'
+          : '<span><small>' + colA + '</small>' + E.flow[a][t[0]] + '</span><span><small>' + colB + '</small>' + E.flow[b][t[0]] + '</span>') +
+        '</div>';
+    }).join('') + '</div>';
+  }
+
+  function renderYear(c) {
+    var y = c.reading.year;
+    $('yearTitle').textContent = y.year + '년 운세';
+    $('lockYear').textContent = y.year + '년';
+    $('yearBox').innerHTML =
+      '<div class="headLine"><h3>' + y.year + '년 · ' + koName(y.ganzhi) + '년</h3><span class="etag">입춘(2월 초)부터 한 해로 봐요</span></div>' +
+      kwHTML(y.stemGod, y.branchGod) +
+      '<p class="easyP">' + summaryOf(y.stemGod, y.branchGod) + '</p>' +
+      (y.withDay ? '<div class="callout">' + E.yearDay[y.withDay] + '</div>' : '') +
+      flowHTML(y.stemGod, y.branchGod, '상반기', '하반기') +
+      '<p class="caveat">' + (y.stemGod !== y.branchGod ? E.note.yearHalf + ' ' : '') + E.note.caveat + '</p>';
+  }
+
+  var YEAR_TAGS = [['work', '💼'], ['money', '💰'], ['love', '💕'], ['study', '📚'], ['business', '🚀']];
+  function renderYears(c) {
+    var ys = c.reading.years;
+    var strip = ys.map(function (x, i) {
+      return '<div class="yc' + (i === 0 ? ' now' : '') + '"><div class="yy">' + x.year + (i === 0 ? ' · 올해' : '') + '</div>' +
+        '<div class="yg">' + koName(x.ganzhi) + '년</div>' +
+        '<div class="yk">#' + E.flow[x.stemGod].keyword + (x.branchGod !== x.stemGod ? ' #' + E.flow[x.branchGod].keyword : '') + '</div></div>';
+    }).join('');
+    var tags = YEAR_TAGS.map(function (t) {
+      var hit = ys.filter(function (x) { return x.tags.indexOf(t[0]) >= 0; }).map(function (x) { return x.year; });
+      return '<div class="tagRow"><span>' + t[1] + ' ' + E.yearTag[t[0]] + '</span>' +
+        (hit.length ? '<b>' + hit.join(' · ') + '</b>' : '<b class="none">5년 안에는 없음</b>') + '</div>';
+    }).join('');
+    $('yearsBox').innerHTML = '<div class="yearStrip">' + strip + '</div><div class="tagList">' + tags + '</div>' +
+      '<p class="caveat">키워드는 그해 들어오는 기운이 나와 어떤 관계인지를 한 단어로 줄인 거예요. 표시된 해는 그런 흐름이 붙기 쉽다는 뜻이지, 일이 정해져 있다는 뜻은 아니에요.</p>';
+  }
+
+  function renderDaeunEasy(c) {
+    var d = c.daeun, r = c.reading.daeun, x = d.list[r.index], nx = d.list[r.next];
+    if (!x) { $('daeunEasyBox').innerHTML = '<p class="caveat">이 날짜로는 10년 운을 계산할 수 없습니다.</p>'; return; }
+    $('daeunEasyBox').innerHTML =
+      '<div class="headLine"><h3>' + x.from.slice(0, 4) + '~' + x.to.slice(0, 4) + '</h3><span class="etag">만 ' + x.startAge + '~' + (x.startAge + 9) + '세 · ' +
+        (r.index === d.current ? '지금 지나는 10년' : r.index === 0 ? '곧 시작하는 첫 10년' : '계산 범위의 마지막 10년') + '</span></div>' +
+      kwHTML(x.stemGod, x.branchGod) +
+      '<p class="easyP">' + summaryOf(x.stemGod, x.branchGod) + '</p>' +
+      flowHTML(x.stemGod, x.branchGod, '앞 5년', '뒤 5년') +
+      (nx ? '<p class="factLine">다음 10년 (' + nx.from.slice(0, 4) + '~) ' +
+        '<span class="kw">#' + E.flow[nx.stemGod].keyword + '</span>' + (nx.branchGod !== nx.stemGod ? '<span class="kw">#' + E.flow[nx.branchGod].keyword + '</span>' : '') + '</p>' : '') +
+      '<p class="caveat">' + (x.stemGod !== x.branchGod ? E.note.daeunHalf + ' ' : '') +
+        (d.approximate ? '출생시간을 모르면 10년 운이 시작되는 시점이 몇 달 어긋날 수 있어요.' : '') + '</p>';
+  }
+
+  /* ── 전문가용 ─────────────────────────────────────────────── */
+  function renderChart(c) {
+    var d = c.pillars.day;
+    $('chartTitle').textContent = koName(d) + '일주 원국';
+    $('chartSub').textContent =
+      (c.input.calendar === 'lunar' ? '음력' + (c.input.leap ? ' 윤달' : '') + ' 입력 · 양력 ' + c.input.solarDate : '양력 ' + c.input.solarDate) +
+      ' · ' + (c.input.hasTime ? c.input.time : '출생시간 모름') + ' · 23시 이후는 다음 날 일주로 계산';
+    $('chartGrid').innerHTML = POS_VIEW.map(function (p) {
+      var cell = c.cells[p];
+      if (!cell) {
+        return '<div class="pcol unknown"><div class="plabel">' + POS_LABEL[p] + '</div><div class="glyph">?</div>' +
+          '<div class="etag">출생시간을 알면<br>채워집니다</div></div>';
+      }
+      var hid = cell.hidden.map(function (h) {
+        return '<span class="hid"><span class="e-' + h.elem + '">' + ch(h.stem) + '</span> ' + h.god + ' <small>' + h.role + '</small></span>';
+      }).join('');
+      var stemYang = D.yangStems.indexOf(cell.stem) >= 0 ? '양' : '음';
+      var branchYang = D.yangBranches.indexOf(cell.branch) >= 0 ? '양' : '음';
+      return '<div class="pcol' + (p === 'day' ? ' me' : '') + '">' +
+        '<div class="plabel">' + POS_LABEL[p] + '</div>' +
+        '<div class="glyph e-' + cell.stemElem + '">' + ch(cell.stem) + '</div>' +
+        '<div class="god">' + cell.stemGod + '</div><div class="etag">' + stemYang + cell.stemElem + '</div>' +
+        '<div class="glyph e-' + cell.branchElem + '">' + ch(cell.branch) + '</div>' +
+        '<div class="god">' + cell.branchGod + '</div><div class="etag">' + branchYang + cell.branchElem + ' · ' + D.branchAnimal[cell.branch] + '</div>' +
+        '<div class="hideRow">' + hid + '</div>' +
+        '<div class="stage">' + cell.lifeStage + '<small>십이운성</small></div>' +
+        '<div class="nayinTag">' + cell.nayin + '</div></div>';
+    }).join('');
+  }
+
+  function renderWarnings(c) {
+    var items = c.warnings.map(function (w) {
+      if (w.type === 'jieqi') {
+        return '<b>절기 경계에 태어났어요</b> — 출생 시각이 <b>' + w.name + '</b>(' + w.at + ')에서 ' + w.hoursAway + '시간 떨어져 있습니다. ' +
+          (w.affects.indexOf('년주') >= 0 ? '태어난 해와 달의 글자' : '태어난 달의 글자') + '가 바뀌는 경계라 ' +
+          (c.input.hasTime ? '출생 시각이 조금만 달라도 풀이가 달라질 수 있습니다.' : '출생시간을 모르면 확정할 수 없습니다.');
+      }
+      if (w.type === 'hour_boundary') {
+        return '<b>시간 경계에 태어났어요</b> — 출생 시각이 ' + w.boundary + '에서 ' + w.minutesAway + '분 거리입니다. ' +
+          '서울 기준 경도 보정(약 32분)을 적용하는 만세력에서는 시주가 <b>' + gz(w.altHour) + '</b>' +
+          (w.altDay !== c.pillars.day ? ', 일주가 <b>' + gz(w.altDay) + '</b>' : '') + '로 나올 수 있습니다.';
+      }
+      if (w.type === 'late_night') {
+        return '<b>밤 11시대 출생</b> — 이 사이트는 23시 이후 출생을 다음 날(<b>' + gz(c.pillars.day) + '</b>일주)로 계산합니다. ' +
+          '보는 방식에 따라 당일(<b>' + gz(w.altDay) + '</b>일주)로 보기도 합니다.';
+      }
+      if (w.type === 'time_unknown') {
+        return '<b>출생시간 모름</b> — 태어난 시간 글자를 비워 두고 계산했어요. 풀이는 나머지 글자로만 했고, 10년 운이 시작되는 시점은 몇 달 어긋날 수 있습니다. ' +
+          '밤 11시 이후 출생이라면 풀이가 달라질 수 있습니다.';
+      }
+      return '';
+    }).filter(Boolean);
+    $('warnWrap').hidden = !items.length;
+    $('warnList').innerHTML = items.map(function (t) { return '<div class="warnItem">' + t + '</div>'; }).join('');
+  }
+
+  function bars(counts, title, sub) {
+    var max = 1, total = 0;
+    ELEMS.forEach(function (e) { max = Math.max(max, counts[e]); total += counts[e]; });
+    return '<h3>' + title + '</h3><div class="sub">' + sub.replace('{n}', total) + '</div>' +
+      ELEMS.map(function (e) {
+        return '<div class="ebar"><span class="e-' + e + '">' + e + '</span><div class="track"><div class="fillE b-' + e +
+          '" style="width:' + (counts[e] / max * 100) + '%"></div></div><b>' + counts[e] + '</b></div>';
+      }).join('');
+  }
+
+  /* 개수 기준(chart_text.py ELEM_RULE)으로 두텁거나 겉 글자에서 빠진 오행만 짚는다 */
+  function tiltHTML(c) {
+    var R = D.text.elemRule, s = c.elements.surface, h = c.elements.withHidden, rows = [];
+    ELEMS.forEach(function (e) {
+      if (s[e] >= R.manySurface || h[e] >= R.manyWithHidden) {
+        rows.push('<p class="factLine"><b class="e-' + e + '">' + e + ' 두터움</b> <span class="etag">겉 ' + s[e] + ' · 지장간 포함 ' + h[e] + '</span><br>' + D.text.elemMany[e] + '</p>');
+      } else if (s[e] === 0) {
+        rows.push('<p class="factLine"><b class="e-' + e + '">' + e + ' 없음</b> <span class="etag">겉 0 · 지장간 포함 ' + h[e] + '</span><br>' + D.text.elemNone[e] +
+          (h[e] ? ' 지장간에는 ' + h[e] + '개 있어 완전히 빠진 것은 아닙니다.' : '') + '</p>');
+      }
+    });
+    return '<h3 style="margin-top:18px">두텁거나 빠진 오행</h3>' +
+      (rows.length ? rows.join('') : '<p class="caveat">한 오행으로 크게 치우치거나 겉 글자에서 빠진 오행이 없습니다.</p>') +
+      '<p class="caveat">' + D.text.elemCaveat + '</p>';
+  }
+
+  function renderElements(c) {
+    $('elemSurface').innerHTML = bars(c.elements.surface, '겉 글자', '원국에 드러난 {n}글자의 오행 개수');
+    $('elemHidden').innerHTML = bars(c.elements.withHidden, '지장간 포함', '지지 속에 숨은 천간까지 센 {n}글자');
+    var combos = c.relations.filter(function (r) { return r.result; });
+    var comboHTML = combos.length
+      ? '<div class="chips">' + combos.map(function (r) {
+          return '<span class="chip">' + glyphs(r.chars) + ' ' + r.type + ' → <span class="e-' + r.result + '">' + r.result + '</span></span>';
+        }).join('') + '</div>'
+      : '<p class="caveat">원국 안에서 한 오행으로 묶이는 합(천간합·삼합·반합·방합)은 없습니다.</p>';
+    var me = c.dayMaster;
+    function bal(label, x) {
+      var help = x.total ? x.help / x.total * 100 : 0;
+      return '<div class="balRow"><span>' + label + '</span><div class="balBar"><i class="b-' + me.elem + '" style="width:' + help + '%"></i>' +
+        '<i style="width:' + (100 - help) + '%;background:#3a4056"></i></div><span>돕는 ' + x.help + ' · 쓰는 ' + x.spend + '</span></div>';
+    }
+    $('elemMore').innerHTML =
+      '<h3>합으로 묶이는 오행</h3>' + comboHTML +
+      '<p class="caveat">오행 개수만 보면 고르게 보여도, 합으로 묶이면 특정 오행이 구조적으로 두터워질 수 있습니다.</p>' +
+      tiltHTML(c) +
+      '<h3 style="margin-top:18px">나를 돕는 기운 · 쓰는 기운</h3>' +
+      '<p class="caveat">일간 ' + ch(me.stem) + '(' + me.elem + ') 기준 — 돕는 기운 = 비겁(' + me.elem + ') + 인성(' + genFrom[me.elem] + '), 나머지는 쓰는 기운</p>' +
+      bal('겉 글자', c.elements.balance.surface) + bal('지장간 포함', c.elements.balance.withHidden) +
+      '<p class="caveat">이 비율로 신강·신약을 단정하지 않습니다. 월령·합충·학파에 따라 판단이 달라집니다.</p>';
+  }
+
+  var REL_BUCKET = { 천간합: 'stemComb', 천간충: 'stemClash', 육합: 'sixComb', 충: 'clash', 해: 'harm', 파: 'break',
+    삼형: 'punish', 형: 'punish', 자형: 'selfPunish', 삼합: 'tripleComb', 반합: 'tripleComb', 방합: 'dirComb' };
+  /* 조합별 해설(chart_text.py). 없으면 종류별 뜻으로 대신한다 */
+  function relText(r) {
+    var bucket = ((D.text && D.text.rel) || {})[REL_BUCKET[r.type]] || {};
+    var body = bucket[r.key];
+    if (!body) return REL_DESC[r.type];
+    if (r.type === '반합') body = D.text.halfLead + ' ' + body;
+    if (r.type === '형' && r.key.length === 3) body = D.text.punishPairLead + ' ' + body;
+    return body;
+  }
+
+  function renderRelations(c) {
+    var list = c.relations.slice().sort(function (a, b) { return REL_ORDER.indexOf(a.type) - REL_ORDER.indexOf(b.type); });
+    var rows = list.map(function (r) {
+      return '<div class="relItem"><span class="relType' + (TENSE[r.type] ? ' tense' : '') + '">' + r.type + '</span>' +
+        '<div class="relMain">' + glyphs(r.chars) + (r.result ? '<span class="res e-' + r.result + '">→ ' + r.result + '</span>' : '') +
+        '<span class="etag">' + r.positions.join('·') + '</span></div>' +
+        '<div class="relDesc">' + txt(relText(r)) + '</div></div>';
+    });
+    if (!list.length) {
+      rows.push('<div class="relItem"><span class="relType">없음</span><div class="relMain">두드러진 합·충이 없습니다</div>' +
+        '<div class="relDesc">네 기둥 사이에서 규칙표에 해당하는 관계가 잡히지 않았습니다.</div></div>');
+    }
+    var v = c.void;
+    var hits = v.hits.map(function (p) { return POS_LABEL[p].replace('주', '지'); });
+    rows.push('<div class="relItem"><span class="relType">공망</span><div class="relMain">' + glyphs(v.branches) + '</div>' +
+      '<div class="relDesc">' + (hits.length ? hits.join('·') + '가 공망에 걸립니다. 비어 있는 자리라는 뜻으로, 나쁜 것으로 단정하지 않습니다.'
+        : '원국 안에 공망에 걸리는 지지는 없습니다.') + '</div></div>');
+    $('relList').innerHTML = rows.join('');
+  }
+
+  function renderIlju(c) {
+    var d = c.pillars.day, cell = c.cells.day, me = c.dayMaster;
+    var god = D.text.tenGod[cell.branchGod];
+    $('iljuBox').innerHTML =
+      '<div class="headLine"><h3>' + koName(d) + '일주</h3><span class="etag">' + d + ' · 60갑자 #' + c.ilju.index + ' · 납음 ' + c.ilju.nayin + '</span></div>' +
+      '<div class="callout" style="margin:12px 0">' + esc(D.iljuCharacter[d]) + '</div>' +
+      '<p class="factLine">일간 <b class="e-' + me.elem + '">' + ch(me.stem) + '</b> — ' + (me.yang ? '양' : '음') + me.elem + ', ' + D.text.elemImage[me.elem] + ' 기운</p>' +
+      '<p class="factLine">일지 십신 <b>' + cell.branchGod + '</b> — ' + god.core + '</p>' +
+      '<p class="factLine">십이운성 <b>' + cell.lifeStage + '</b> — ' + D.text.life[cell.lifeStage] + '</p>' +
+      '<div style="margin-top:14px"><a class="btn secondary" href="' + c.ilju.url + '">' + koName(d) + '일주 백과 보기 →</a></div>';
+  }
+
+  function renderSeun(c) {
+    var y = c.seun, g = D.text.tenGod;
+    $('seunBox').innerHTML =
+      '<div class="headLine"><h3>' + y.year + '년 ' + glyphs(y.ganzhi) + '</h3><span class="etag">' + koName(y.ganzhi) + '년 · ' + y.basis + '</span></div>' +
+      '<p class="factLine">일간 기준으로 올해 천간은 <b>' + y.stemGod + '</b>(' + g[y.stemGod].short + '), 지지는 <b>' + y.branchGod + '</b>(' + g[y.branchGod].short + ') 자리입니다.</p>' +
+      '<p class="factLine">천간 <b>' + y.stemGod + '</b> — ' + D.text.seunGod[y.stemGod] + '</p>' +
+      (y.branchGod !== y.stemGod ? '<p class="factLine">지지 <b>' + y.branchGod + '</b> — ' + D.text.seunGod[y.branchGod] + '</p>' : '') +
+      '<p class="caveat">한 해를 확정하는 값이 아니라, 원국과 올해 들어오는 글자의 관계를 보여주는 참고 정보입니다.</p>';
+  }
+
+  function daeunNowHTML(d, i) {
+    var x = d.list[i];
+    if (!x) return '';
+    var god = D.text.daeunGod;
+    var lines = x.stemGod === x.branchGod
+      ? '<p class="factLine">천간·지지 모두 <b>' + x.stemGod + '</b> — ' + god[x.stemGod] + '</p>'
+      : '<p class="factLine">천간 <b>' + x.stemGod + '</b> — ' + god[x.stemGod] + '</p>' +
+        '<p class="factLine">지지 <b>' + x.branchGod + '</b> — ' + god[x.branchGod] + '</p>';
+    return '<div style="margin-top:12px"><p class="factLine"><b>' + (i === d.current ? '지금 대운' : i === 0 ? '첫 대운' : '마지막 대운') + ' ' + glyphs(x.ganzhi) + '</b> ' +
+      '<span class="etag">' + x.from.slice(0, 4) + '~' + x.to.slice(0, 4) + ' · 만 ' + x.startAge + '세부터</span></p>' + lines +
+      '<p class="caveat">10년의 일을 확정하는 값이 아니라, 이 기간에 들어오는 글자가 일간과 어떤 관계인지 설명한 것입니다.</p></div>';
+  }
+
+  function renderDaeun(c) {
+    var d = c.daeun, list = d.list;
+    var off = d.startOffset;
+    var head = '<p class="factLine">' + (d.forward ? '순행' : '역행') + ' · 대운수 ' + off.years + '년' + (off.months ? ' ' + off.months + '개월' : '') +
+      ' · 첫 대운 ' + d.startSolar + '부터 (만 ' + list[0].startAge + '세)</p>';
+    if (d.approximate) head += '<p class="caveat" style="margin-top:0">출생시간을 모르면 대운 시작일이 몇 달 어긋날 수 있습니다.</p>';
+    var items = list.map(function (x, i) {
+      var now = i === d.current;
+      return '<div class="dy' + (now ? ' now' : '') + '">' + (now ? '<span class="nowTag">지금</span>' : '') +
+        '<div class="yr">' + x.startYear + '년~</div><div class="gz">' + glyphs(x.ganzhi) + '</div>' +
+        '<div class="gd">' + x.stemGod + ' · ' + x.branchGod + '</div><div class="age">만 ' + x.startAge + '세부터</div></div>';
+    }).join('');
+    $('daeunBox').innerHTML = head + '<div id="timeline" class="timeline">' + items + '</div>' + daeunNowHTML(d, c.reading.daeun.index);
+    scrollTimeline();
+  }
+  /* 접힌 상태에서는 위치를 잴 수 없어 펼칠 때 한 번 더 부른다 */
+  function scrollTimeline() {
+    var tl = $('timeline'), nowEl = tl && tl.querySelector('.now');
+    if (nowEl && nowEl.offsetWidth) tl.scrollLeft = Math.max(0, nowEl.offsetLeft - tl.offsetLeft - 120);
+  }
+
+  function renderAll(c) {
+    renderWarnings(c);
+    renderSummary(c); renderTopics(c); renderYear(c); renderYears(c); renderDaeunEasy(c);
+    renderChart(c); renderElements(c); renderRelations(c); renderIlju(c); renderSeun(c); renderDaeun(c);
+  }
+
+  /* ── 공유 카드 — 생년월일·출생시간·원국 8자는 넣지 않는다 ─────────── */
+  function roundRect(g, x, y, w, h, r) {
+    g.beginPath(); g.moveTo(x + r, y);
+    g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+    g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+  }
+  function wrap(g, text, maxW) {
+    var lines = [], cur = '';
+    for (var i = 0; i < text.length; i++) {
+      var next = cur + text[i];
+      if (g.measureText(next).width > maxW && cur) { lines.push(cur.trim()); cur = text[i]; } else cur = next;
+    }
+    if (cur.trim()) lines.push(cur.trim());
+    return lines;
+  }
+  function drawCard(c) {
+    var cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1350;
+    var g = cv.getContext('2d'), bg = g.createLinearGradient(0, 0, 1080, 1350);
+    bg.addColorStop(0, '#171d31'); bg.addColorStop(1, '#090b10');
+    g.fillStyle = bg; g.fillRect(0, 0, 1080, 1350);
+    var d = c.pillars.day;
+    g.textAlign = 'center';
+    g.fillStyle = '#d6dbea'; g.font = '700 34px sans-serif'; g.fillText('연결운 · 나의 일주', 540, 120);
+    var tg = g.createLinearGradient(250, 0, 830, 0); tg.addColorStop(0, '#f0c2ff'); tg.addColorStop(1, '#a9c0ff');
+    g.fillStyle = tg; g.font = '900 112px sans-serif'; g.fillText(koName(d) + '일주', 540, 290);
+    g.fillStyle = '#8993aa'; g.font = '600 42px sans-serif'; g.fillText(d + ' · ' + c.ilju.nayin, 540, 365);
+    g.fillStyle = '#e9ecf5'; g.font = '600 40px sans-serif';
+    wrap(g, D.iljuCharacter[d] || '', 860).slice(0, 4).forEach(function (line, i) { g.fillText(line, 540, 490 + i * 62); });
+    g.textAlign = 'left'; g.fillStyle = '#c1c7d6'; g.font = '700 30px sans-serif'; g.fillText('오행 분포', 170, 810);
+    var counts = c.elements.surface, max = 1;
+    ELEMS.forEach(function (e) { max = Math.max(max, counts[e]); });
+    ELEMS.forEach(function (e, i) {
+      var y = 880 + i * 76;
+      g.textAlign = 'left'; g.fillStyle = HEX[e]; g.font = '800 32px sans-serif'; g.fillText(e, 170, y);
+      g.fillStyle = '#242a3b'; roundRect(g, 250, y - 26, 580, 24, 12); g.fill();
+      if (counts[e]) { g.fillStyle = HEX[e]; roundRect(g, 250, y - 26, Math.max(24, 580 * counts[e] / max), 24, 12); g.fill(); }
+      g.textAlign = 'right'; g.fillStyle = '#f4f6fa'; g.font = '700 32px sans-serif'; g.fillText(String(counts[e]), 910, y);
+    });
+    g.textAlign = 'center'; g.fillStyle = '#6f788d'; g.font = '500 24px sans-serif';
+    g.fillText('오락·참고용 · 생년월일은 카드에 담지 않습니다', 540, 1285);
+    return cv;
+  }
+
+  /* ── 공개 핸들러 ─────────────────────────────────────────────── */
+  window.runChart = function () {
+    if (!window.YY || typeof YY.chart !== 'function') return showError('계산 엔진을 불러오지 못했습니다. 새로고침해 주세요.');
+    if (!$('timeUnknown').checked && !$('birthTime').value) return showError('출생시간을 입력하거나 ‘모름’에 체크해 주세요.');
+    var input = readInput(), c;
+    try {
+      c = YY.chart(input);
+    } catch (e) {
+      if (e && e.name === 'ChartInputError') return showError(e.message);
+      if (window.console) console.error(e);
+      return showError('계산 중 문제가 생겼습니다. 입력값을 확인해 주세요.');
+    }
+    hideError();
+    last = c;
+    persist(input);
+    renderAll(c);
+    $('chartResult').classList.add('show');
+    $('chartResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    /* 원국 내용은 보내지 않는다 — 입력 방식 두 가지만 */
+    if (window.YYA) YYA.track('분석실행', { 도구: '원국', 시간입력: c.input.hasTime ? '있음' : '모름', 달력: c.input.calendar === 'lunar' ? '음력' : '양력' });
+  };
+
+  window.toggleHangul = function () {
+    hangul = !hangul;
+    $('hangulBtn').textContent = hangul ? '한자로 보기' : '한글로 보기';
+    if (last) renderAll(last);
+  };
+
+  window.downloadChartCard = function () {
+    if (!last) return;
+    var a = document.createElement('a');
+    a.download = 'yeongyeol_' + koName(last.pillars.day) + '일주.png';
+    a.href = drawCard(last).toDataURL('image/png');
+    document.body.appendChild(a); a.click(); a.remove();
+    if (YY.toast) YY.toast('공유 카드를 저장했습니다');
+    if (window.YYA) YYA.track('공유클릭', { 방식: '카드저장', 도구: '원국' });
+  };
+
+  /* 잠금 카드 — analytics.js 가 onclick 의 openPremium('상품') 인자를 '상품'으로 집계한다.
+     demoPay 는 결제가 아니라 '출시되면 보고 싶어요' 의향 표시다(결제 정보를 받지 않는다). */
+  window.openPremium = function (kind) {
+    var p = PRODUCTS[kind] || PRODUCTS.chart_deep;
+    $('premiumTitle').textContent = (kind === 'chart_year' && last ? last.reading.year.year + '년 ' : '') + p.title;
+    $('premiumDesc').textContent = p.desc + ' 아직 준비 중이라, 보고 싶다는 분이 많은 리포트부터 만들어요.';
+    $('premiumList').innerHTML = p.items.map(function (x) { return '<li>' + x + '</li>'; }).join('');
+    $('premiumPrice').textContent = p.price;
+    $('premiumModal').classList.add('show');
+  };
+  window.closePremium = function (e) {
+    if (e && e.target !== $('premiumModal')) return;
+    $('premiumModal').classList.remove('show');
+  };
+  window.demoPay = function () {
+    $('premiumModal').classList.remove('show');
+    if (YY.toast) YY.toast('고마워요! 보고 싶다는 분이 많은 리포트부터 준비할게요.');
+  };
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $('premiumModal').classList.remove('show'); });
+  $('expert').addEventListener('toggle', function () { if ($('expert').open) scrollTimeline(); });
+
+  /* 자동 테스트에서 화면 상태를 확인할 때 쓴다 */
+  window.__chartPage = { drawCard: drawCard, last: function () { return last; } };
+
+  fillSelect($('by'), 1900, 2100, '년', 1994);
+  fillSelect($('bm'), 1, 12, '월', 2);
+  fillSelect($('bd'), 1, 31, '일', 16);
+  restore();
+  sync();
+  document.querySelectorAll('input[name="cal"]').forEach(function (el) { el.addEventListener('change', sync); });
+  $('timeUnknown').addEventListener('change', sync);
+  if (!window.YY || typeof YY.chart !== 'function' || !D.tenGod || !D.easy) showError('계산 엔진을 불러오지 못했습니다. 새로고침해 주세요.');
+})();
+</script>
+<script src="/ads.js"></script>
+<script src="/assets/analytics.js"></script>
+</body>
+</html>
