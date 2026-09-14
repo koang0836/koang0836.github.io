@@ -90,10 +90,16 @@
   if (SUFFIX.test(location.hash.slice(1))) history.replaceState(null, '', location.pathname + location.search + baseHash());
   function visible(n) { return !!(n && (n.offsetParent !== null || n.tagName === 'DETAILS')); }
 
+  /* data-yy-solo: 한 페이지에 도구가 여럿이면(연락·재회) 결과 뒤의 다른 도구도 숨긴다 — 안내문·푸터는 남긴다 */
   function hidePreceding(el) {
+    var solo = el.hasAttribute('data-yy-solo');
+    function hide(sib) { if (!sib.classList.contains('yy-hid')) { sib.classList.add('yy-hid'); R.hidden.push(sib); } }
     for (var node = el; node && node.parentElement && node.parentElement !== d.body; node = node.parentElement) {
-      for (var sib = node.previousElementSibling; sib; sib = sib.previousElementSibling) {
-        if (!sib.classList.contains('yy-hid')) { sib.classList.add('yy-hid'); R.hidden.push(sib); }
+      for (var sib = node.previousElementSibling; sib; sib = sib.previousElementSibling) hide(sib);
+      if (solo) {
+        for (var nx = node.nextElementSibling; nx; nx = nx.nextElementSibling) {
+          if (nx.tagName !== 'SCRIPT' && !nx.classList.contains('notice') && !nx.classList.contains('footer')) hide(nx);
+        }
       }
     }
   }
@@ -355,8 +361,19 @@
     '/cat.html': { groups: [
       { role: 'other', kind: 'cat', ids: { name: 'catName', date: 'catDate', time: 'catTime', breed: 'catBreed' }, into: ['h3', '우리 고양이'], autofill: true },
       { role: 'me', ids: { name: 'catOwner', date: 'catOwnerDate', time: 'catOwnerTime' }, into: ['h3', '집사'] }
+    ] },
+    '/family.html': { groups: [{ role: 'house', before: '#houseRows' }] },
+    '/love.html': { groups: [
+      { role: 'me', ids: { name: 'laName', date: 'laDate', time: 'laTime' }, into: ['.grid2 > .card.pad > h3', 0] },
+      { role: 'other', kind: 'person', ids: { name: 'lbName', date: 'lbDate', time: 'lbTime' }, into: ['.grid2 > .card.pad > h3', 1] },
+      { role: 'me', ids: { name: 'cmpMe', date: 'cmpMeDate' }, top: ['.compareForm > div', 0] },
+      { role: 'other', kind: 'person', ids: { name: 'cmpA', date: 'cmpADate' }, top: ['.compareForm > div', 1] },
+      { role: 'other', kind: 'person', ids: { name: 'cmpB', date: 'cmpBDate' }, top: ['.compareForm > div', 2] },
+      { role: 'other', kind: 'person', ids: { name: 'cmpC', date: 'cmpCDate' }, top: ['.compareForm > div', 3] },
+      { role: 'me', ids: { name: 'dnaName', date: 'dnaDate' }, before: '#dna + section .grid2' }
     ] }
   };
+  var HOUSE_TYPE = { person: '사람', dog: '강아지', cat: '고양이' };
 
   function readSaju() {
     var cal = (d.querySelector('input[name="cal"]:checked') || {}).value || 'solar';
@@ -439,6 +456,23 @@
       openSheet({ title: '저장한 사람 추가', items: items });
       return;
     }
+    if (g.role === 'house') {
+      (p && p.me ? [p.me] : []).concat(p ? p.people : []).forEach(function (y) {
+        var isMe = y === p.me, kind = isMe ? 'person' : y.kind, name = y.name || (isMe ? '나' : KIND[kind].label);
+        items.push({ label: isMe ? name + ' (내 정보)' : name, sub: (isMe ? '' : KIND[kind].label + ' · ') + describe(y), svg: 'plus', action: function () {
+          if (d.querySelectorAll('.houseRow').length >= 7) { toast('최대 7명(마리)까지 넣을 수 있어요'); return; }
+          if (!houseDate(y)) { toast('양력 생년월일이 없어 추가하지 못했어요'); return; }
+          if (typeof window.addHouse !== 'function') return;
+          window.addHouse({});
+          var rows = d.querySelectorAll('.houseRow');
+          fillHouseRow(rows[rows.length - 1], y, kind);
+          toast(name + ' 추가했어요');
+        } });
+      });
+      if (!items.length) items.push({ label: '저장한 사람·반려동물이 아직 없어요', sub: '궁합·강아지·고양이 궁합에서 저장하면 여기서 바로 추가할 수 있어요', svg: 'user' });
+      openSheet({ title: '저장한 사람·반려동물 추가', items: items });
+      return;
+    }
     (p ? p.people : []).filter(function (y) { return y.kind === g.kind; }).forEach(function (y) {
       items.push({ label: y.name, sub: describe(y), svg: 'user', action: function () { fillGroup(g, y); toast(y.name + ' 정보를 채웠어요'); } });
     });
@@ -452,15 +486,17 @@
       var b = d.createElement('button');
       b.type = 'button';
       b.className = 'yy-pick';
-      b.innerHTML = svg(g.role === 'group' ? 'plus' : 'user') + '<span>' + (g.role === 'me' ? '내 정보' : g.role === 'group' ? '저장한 사람' : '저장한 ' + KIND[g.kind].label) + '</span>';
+      var many = g.role === 'group' || g.role === 'house';
+      b.innerHTML = svg(many ? 'plus' : 'user') + '<span>' + (g.role === 'me' ? '내 정보' : many ? '저장한 사람' : '저장한 ' + KIND[g.kind].label) + '</span>';
       b.addEventListener('click', function () { openPicker(g); });
-      if (g.before) {
-        var anchor = d.querySelector(g.before);
+      if (g.before || g.top) {
+        /* before: 그 요소 바로 앞 줄 · top: 그 칸 맨 위 줄 */
+        var anchor = g.before ? d.querySelector(g.before) : d.querySelectorAll(g.top[0])[g.top[1]];
         if (!anchor) return;
         var row = d.createElement('div');
-        row.className = 'yy-pickrow';
+        row.className = g.before ? 'yy-pickrow' : 'yy-pickrow yy-pickrow-in';
         row.appendChild(b);
-        anchor.parentNode.insertBefore(row, anchor);
+        if (g.before) anchor.parentNode.insertBefore(row, anchor); else anchor.insertBefore(row, anchor.firstChild);
         return;
       }
       var list = [].slice.call(d.querySelectorAll(g.into[0]));
@@ -485,7 +521,32 @@
         var y = p.people.filter(function (z) { return z.kind === g.kind; })[0];
         if (y) fillGroup(g, y);
       }
+      if (g.role === 'house') {
+        /* 예시로 들어 있는 첫 사람·강아지·고양이 줄을 내 정보·최근 저장한 아이로 바꾼다 */
+        var rows = [].slice.call(d.querySelectorAll('.houseRow'));
+        var firstOf = function (type) { return rows.filter(function (r) { return r.querySelector('.htype').value === type; })[0]; };
+        if (p.me && houseDate(p.me) && firstOf('사람')) fillHouseRow(firstOf('사람'), p.me, 'person');
+        ['dog', 'cat'].forEach(function (k) {
+          var z = p.people.filter(function (q) { return q.kind === k; })[0], r = firstOf(HOUSE_TYPE[k]);
+          if (z && r) fillHouseRow(r, z, k);
+        });
+      }
     });
+  }
+
+  /* 우리집 관계도 한 줄 채우기 — 품종이 목록에 없으면 믹스·기타 */
+  function houseDate(y) { return y.solarDate || (y.calendar !== 'lunar' ? y.date : ''); }
+  function fillHouseRow(r, y, kind) {
+    if (!r) return;
+    var t = r.querySelector('.htype'), n = r.querySelector('.hname'), dt = r.querySelector('.hdate'), br = r.querySelector('.hbreed');
+    if (t && t.value !== HOUSE_TYPE[kind]) { t.value = HOUSE_TYPE[kind]; if (typeof window.houseType === 'function') window.houseType(t); }
+    if (n && y.name) n.value = y.name;
+    if (dt && houseDate(y)) dt.value = houseDate(y);
+    if (br && kind !== 'person') {
+      var opts = [].slice.call(br.options);
+      var o = opts.filter(function (x) { return x.text === y.breed; })[0] || opts.filter(function (x) { return x.text === '믹스·기타'; })[0];
+      if (o) br.value = o.value;
+    }
   }
 
   function runFromMe(cfg) {

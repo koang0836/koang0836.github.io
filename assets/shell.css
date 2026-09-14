@@ -184,6 +184,7 @@ html[data-yy-nav="back"]::view-transition-new(root){animation-name:yy-in-left}
 
 /* ── 내 정보 · 저장한 사람 (5단계) ── */
 .yy-pickrow{display:flex;justify-content:flex-end;max-width:1040px;margin:0 auto 8px}
+.yy-pickrow-in{margin:0 0 4px;max-width:none}
 .yy-pick-host{display:flex!important;align-items:center;gap:8px;flex-wrap:wrap}
 .yy-pick-host>small{display:none}
 .yy-pick{display:inline-flex!important;align-items:center;gap:5px;margin:0 0 0 auto!important;padding:6px 11px!important;border-radius:999px!important;border:1px solid var(--yy-line)!important;
