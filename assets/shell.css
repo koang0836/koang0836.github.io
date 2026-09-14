@@ -181,3 +181,33 @@ html[data-yy-nav="back"]::view-transition-new(root){animation-name:yy-in-left}
 }
 @keyframes yy-sheet-up{from{transform:translateY(100%)}to{transform:none}}
 @media (prefers-reduced-motion:reduce){.yy-sheet,.yy-sheet-back{transition:none}.modalBack .modal{animation:none!important}}
+
+/* ── 내 정보 · 저장한 사람 (5단계) ── */
+.yy-pickrow{display:flex;justify-content:flex-end;max-width:1040px;margin:0 auto 8px}
+.yy-pick-host{display:flex!important;align-items:center;gap:8px;flex-wrap:wrap}
+.yy-pick-host>small{display:none}
+.yy-pick{display:inline-flex!important;align-items:center;gap:5px;margin:0 0 0 auto!important;padding:6px 11px!important;border-radius:999px!important;border:1px solid var(--yy-line)!important;
+  background:var(--yy-card)!important;color:var(--yy-ac)!important;font-family:var(--yy-font)!important;font-size:13px!important;font-weight:600!important;line-height:1.2!important;
+  min-width:0!important;width:auto!important;height:auto!important;box-shadow:none!important;cursor:pointer;-webkit-appearance:none;appearance:none;letter-spacing:0}
+.yy-pick .yy-i{width:16px;height:16px}
+.yy-toast{position:fixed;left:50%;bottom:calc(var(--yy-tab) + var(--yy-safe) + 18px);z-index:80;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#f2f3f7;color:#11141c;
+  padding:11px 16px;border-radius:999px;font-family:var(--yy-font);font-size:14px;font-weight:600;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yy-toast.on{opacity:1;transform:translate(-50%,0)}
+html.yy-result .yy-toast{bottom:calc(86px + var(--yy-safe))}
+#yyProfile h2.yy-sub2{margin-top:18px}
+.yy-mini{width:40px;height:40px;flex:none;border:0!important;background:transparent!important;color:var(--yy-mute)!important;display:flex!important;align-items:center;justify-content:center;
+  border-radius:12px;cursor:pointer;padding:0!important;min-width:0!important;box-shadow:none!important;-webkit-appearance:none;appearance:none}
+.yy-mini .yy-i{width:20px;height:20px}
+.yy-row-actions{display:flex;gap:8px;padding:0 16px 14px 70px}
+.yy-chipbtn{padding:8px 13px;border-radius:999px;background:var(--yy-acbg);color:var(--yy-tx)!important;font-size:14px;font-weight:600;text-decoration:none!important}
+.yy-textbtn{display:block;margin:12px auto 0!important;border:0!important;background:transparent!important;color:var(--yy-mute)!important;font-family:var(--yy-font)!important;font-size:13px!important;
+  text-decoration:underline;cursor:pointer;padding:6px!important;min-width:0!important;width:auto!important;box-shadow:none!important}
+.yy-note{font-size:12px;color:var(--yy-mute);margin:8px 6px 0;text-align:center}
+.yy-mecard{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:16px 18px;border-radius:20px;background:var(--yy-card);margin-bottom:12px}
+.yy-mecard-t{min-width:0}
+.yy-mecard-t small{display:block;font-size:12px;color:var(--yy-sub)}
+.yy-mecard-t b{display:block;font-size:17px;color:var(--yy-tx);margin:2px 0}
+.yy-mecard-t span{display:block;font-size:13px;color:var(--yy-sub)}
+.yy-mecard-a{display:flex;flex-direction:column;gap:6px;flex:none}
+.yy-mecard-a a{padding:8px 12px;border-radius:12px;background:var(--yy-acbg);color:var(--yy-tx)!important;font-size:13px;font-weight:600;text-decoration:none!important;text-align:center}
+@media (min-width:900px){.yy-toast{bottom:32px}}

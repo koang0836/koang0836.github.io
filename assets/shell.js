@@ -170,6 +170,7 @@
         }
         buildActions(el);
         root.classList.add('yy-result');
+        profileOnResult(el);
         if (!(history.state && history.state.yyResult)) {
           var h = location.hash.slice(1);
           history.pushState({ yyResult: 1 }, '', location.pathname + location.search + '#' + (h ? h + '-result' : 'result'));
@@ -251,6 +252,7 @@
       b.type = 'button';
       b.className = 'yy-sheet-item';
       if (it.onclick) b.setAttribute('onclick', it.onclick);
+      if (it.action) b.addEventListener('click', it.action);
       b.innerHTML = (it.svg ? '<span class="yy-ic">' + svg(it.svg) + '</span>' : '') +
         '<span class="yy-sheet-label">' + esc(it.label) + (it.sub ? '<small>' + esc(it.sub) + '</small>' : '') + '</span>';
       b.addEventListener('click', function () { setTimeout(closeSheet, 0); });
@@ -287,5 +289,284 @@
     if (items.length) openSheet({ title: '공유하기', items: items });
   }
 
-  window.YYShell = { openResult: openResult, closeResult: closeResult, openSheet: openSheet, closeSheet: closeSheet };
+  /* ── 내 정보 · 저장한 사람 (5단계) ─────────────────────────────
+   * 이 기기 브라우저(localStorage 'yeongyeol.profile.v1')에만 저장한다. 서버·주소·통계로 보내지 않는다.
+   * 저장은 사용자가 직접 할 때만: 시트의 '저장' 항목, 또는 기존 '이 기기에 입력값 저장'을 켠 채 결과를 볼 때.
+   * - 입력 화면의 사람 칸 옆 [내 정보] · [저장한 사람/강아지/고양이] 버튼 → 바텀시트에서 채우기·저장
+   * - 내 정보가 있으면 입력 화면을 열 때 '나' 칸을 채운다 (공유 링크 값·페이지 자체 저장값이 있으면 건드리지 않는다)
+   * - /saju.html#me · /today.html#me 는 내 정보로 채우고 바로 계산
+   * - 전체 탭 #yyProfile · 홈 #yyHomeMe 에 내 정보 카드 (지우기 포함) */
+  var PKEY = 'yeongyeol.profile.v1';
+  var KIND = { person: { label: '사람', img: 'bust_in_silhouette' }, dog: { label: '강아지', img: 'dog_face' }, cat: { label: '고양이', img: 'cat_face' } };
+  var GENDER_TEXT = { F: '여성', M: '남성', '': '선택 안 함' };
+  function pload() {
+    try {
+      var p = JSON.parse(localStorage.getItem(PKEY) || 'null');
+      if (p && typeof p === 'object') { p.people = Array.isArray(p.people) ? p.people : []; return p; }
+    } catch (e) { /* 손상된 값·저장소 차단은 없는 것으로 */ }
+    return null;
+  }
+  function psave(p) {
+    try { p.v = 1; localStorage.setItem(PKEY, JSON.stringify(p)); return true; }
+    catch (e) { toast('이 브라우저에서는 저장할 수 없어요'); return false; }
+  }
+  function pclear() { try { localStorage.removeItem(PKEY); } catch (e) { /* 무시 */ } }
+  function byId(id) { return d.getElementById(id); }
+  function val(id) { var el = byId(id); return el ? String(el.value || '').trim() : ''; }
+  function fire(el) { el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }
+  function setVal(id, v) {
+    var el = byId(id);
+    if (!el || v == null) return;
+    if (el.tagName === 'SELECT') {
+      var opt = [].slice.call(el.options).filter(function (o) { return o.value === String(v) || o.text === String(v); })[0];
+      if (!opt) return;
+      el.value = opt.value;
+    } else el.value = v;
+    fire(el);
+  }
+  function genderFrom(v) { return v === '여성' || v === 'F' ? 'F' : v === '남성' || v === 'M' ? 'M' : ''; }
+  function dot(s) { return s ? String(s).replace(/-/g, '.') : ''; }
+  function describe(x) {
+    var date = x.calendar === 'lunar' ? '음력 ' + dot(x.date) + (x.leap ? ' 윤달' : '') : dot(x.solarDate || x.date);
+    return [date, x.time || '시간 모름', x.breed || '', x.gender === 'F' ? '여성' : x.gender === 'M' ? '남성' : ''].filter(Boolean).join(' · ');
+  }
+  var toastTimer = 0;
+  function toast(msg) {
+    var t = d.querySelector('.yy-toast');
+    if (!t) { t = d.createElement('div'); t.className = 'yy-toast'; t.setAttribute('role', 'status'); d.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('on'); }, 2200);
+  }
+
+  /* 페이지별 입력 칸 — 테스트 사본(_t…_이름.html)도 같은 설정을 쓴다 */
+  var PAGE = location.pathname.replace(/^\/_t[0-9a-z]*_/, '/');
+  var FORMS = {
+    '/saju.html': { run: 'runChart', groups: [{ role: 'me', saju: true, stored: 'yeongyeol.chart.v1', before: '.formCard' }] },
+    '/today.html': { run: 'runToday', groups: [{ role: 'me', ids: { name: 'todayName', date: 'todayDate', time: 'todayTime' }, before: 'section.card.pad.grid2' }] },
+    '/match.html': { groups: [
+      { role: 'me', ids: { name: 'nameA', date: 'dateA', time: 'timeA', gender: 'genderA' }, into: ['#pairView .person h2', 0], stored: 'yeongyeol.inputs.v3', query: 'dateA' },
+      { role: 'other', kind: 'person', ids: { name: 'nameB', date: 'dateB', time: 'timeB', gender: 'genderB' }, into: ['#pairView .person h2', 1] },
+      { role: 'group', into: ['#groupView .groupToolbar', 0] },
+      { role: 'other', kind: 'dog', ids: { name: 'petName', date: 'petDate', time: 'petTime', breed: 'petBreed' }, into: ['#petView h3', '우리 아이'], autofill: true },
+      { role: 'me', ids: { name: 'ownerName', date: 'ownerDate', time: 'ownerTime' }, into: ['#petView h3', '보호자'] }
+    ] },
+    '/cat.html': { groups: [
+      { role: 'other', kind: 'cat', ids: { name: 'catName', date: 'catDate', time: 'catTime', breed: 'catBreed' }, into: ['h3', '우리 고양이'], autofill: true },
+      { role: 'me', ids: { name: 'catOwner', date: 'catOwnerDate', time: 'catOwnerTime' }, into: ['h3', '집사'] }
+    ] }
+  };
+
+  function readSaju() {
+    var cal = (d.querySelector('input[name="cal"]:checked') || {}).value || 'solar';
+    var date = val('by') + '-' + ('0' + val('bm')).slice(-2) + '-' + ('0' + val('bd')).slice(-2);
+    var unknown = !!(byId('timeUnknown') && byId('timeUnknown').checked);
+    var x = { name: '나', calendar: cal, leap: cal === 'lunar' && !!(byId('leap') && byId('leap').checked), date: date,
+      time: unknown ? '' : val('birthTime'), gender: (d.querySelector('input[name="gender"]:checked') || {}).value || '' };
+    x.solarDate = cal === 'solar' ? date : '';
+    if (cal === 'lunar' && window.YY && window.YY.chart) {
+      try { x.solarDate = window.YY.chart({ calendar: 'lunar', leap: x.leap, date: date, time: x.time, gender: x.gender || 'F' }).input.solarDate; } catch (e) { /* 없는 음력 날짜면 양력 칸은 비워 둔다 */ }
+    }
+    return x;
+  }
+  function fillSaju(x) {
+    var cal = d.querySelector('input[name="cal"][value="' + (x.calendar === 'lunar' ? 'lunar' : 'solar') + '"]');
+    if (cal) { cal.checked = true; fire(cal); }
+    var p = String(x.date || '').split('-');
+    if (p.length === 3) { setVal('by', +p[0]); setVal('bm', +p[1]); setVal('bd', +p[2]); }
+    if (byId('leap')) byId('leap').checked = x.calendar === 'lunar' && !!x.leap;
+    var tu = byId('timeUnknown');
+    if (x.time) { setVal('birthTime', x.time); if (tu && tu.checked) { tu.checked = false; fire(tu); } }
+    else if (tu && !tu.checked) { tu.checked = true; fire(tu); }
+    var g = d.querySelector('input[name="gender"][value="' + (x.gender === 'M' ? 'M' : 'F') + '"]');
+    if (g) { g.checked = true; fire(g); }
+  }
+  function readGroup(g) {
+    if (g.saju) return readSaju();
+    var x = { name: val(g.ids.name), date: val(g.ids.date), time: g.ids.time ? val(g.ids.time) : '', calendar: 'solar', leap: false };
+    x.solarDate = x.date;
+    if (g.ids.gender) x.gender = genderFrom(val(g.ids.gender));
+    if (g.ids.breed) x.breed = val(g.ids.breed);
+    return x;
+  }
+  function fillGroup(g, x) {
+    if (g.saju) { fillSaju(x); return; }
+    var date = x.solarDate || (x.calendar !== 'lunar' ? x.date : '');
+    if (g.ids.name && x.name) setVal(g.ids.name, x.name);
+    if (date) setVal(g.ids.date, date);
+    if (g.ids.time) setVal(g.ids.time, x.time || '');
+    if (g.ids.gender && x.gender != null) setVal(g.ids.gender, GENDER_TEXT[x.gender || '']);
+    if (g.ids.breed && x.breed) setVal(g.ids.breed, x.breed);
+  }
+
+  function saveMe(x, quiet) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(x.date || '')) { if (!quiet) toast('생년월일을 먼저 입력해 주세요'); return; }
+    var p = pload() || { me: null, people: [] }, prev = p.me || {};
+    p.me = { name: x.name || prev.name || '나', calendar: x.calendar || 'solar', leap: !!x.leap, date: x.date,
+      solarDate: x.solarDate || (x.calendar === 'lunar' ? '' : x.date), time: x.time || '', gender: x.gender || prev.gender || '', updated: Date.now() };
+    if (psave(p)) { if (!quiet) toast('내 정보를 이 기기에 저장했어요'); renderProfileViews(); }
+  }
+  function saveOther(kind, x, quiet) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(x.date || '')) { if (!quiet) toast('생년월일을 먼저 입력해 주세요'); return; }
+    var p = pload() || { me: null, people: [] }, name = x.name || KIND[kind].label;
+    p.people = p.people.filter(function (y) { return !(y.kind === kind && y.name === name); });
+    p.people.unshift({ id: kind + '-' + Date.now().toString(36), kind: kind, name: name, date: x.date, solarDate: x.solarDate || x.date, calendar: 'solar',
+      time: x.time || '', gender: x.gender || '', breed: x.breed || '', updated: Date.now() });
+    p.people = p.people.slice(0, 10);
+    if (psave(p)) { if (!quiet) toast(name + ' 정보를 저장했어요'); renderProfileViews(); }
+  }
+
+  function openPicker(g) {
+    var p = pload(), items = [];
+    if (g.role === 'me') {
+      if (p && p.me) items.push({ label: '내 정보 불러오기', sub: describe(p.me), svg: 'user', action: function () { fillGroup(g, p.me); toast('내 정보를 채웠어요'); } });
+      items.push({ label: p && p.me ? '지금 입력한 값으로 내 정보 바꾸기' : '지금 입력한 값을 내 정보로 저장', sub: '이 기기에만 저장돼요 · 전체 탭에서 지울 수 있어요', svg: 'save',
+        action: function () { saveMe(readGroup(g)); } });
+      openSheet({ title: '내 정보', items: items });
+      return;
+    }
+    if (g.role === 'group') {
+      var ppl = (p && p.me ? [p.me] : []).concat((p ? p.people : []).filter(function (y) { return y.kind === 'person'; }));
+      ppl.forEach(function (y) {
+        var name = y.name || '나';
+        items.push({ label: y === (p && p.me) ? name + ' (내 정보)' : name, sub: describe(y), svg: 'plus', action: function () {
+          if (typeof window.addGroupPerson === 'function') window.addGroupPerson({ name: name, date: y.solarDate || y.date, time: y.time || '' });
+          toast(name + ' 님을 추가했어요');
+        } });
+      });
+      if (!items.length) items.push({ label: '저장한 사람이 아직 없어요', sub: '1:1 궁합이나 내 사주에서 저장하면 여기서 바로 추가할 수 있어요', svg: 'user' });
+      openSheet({ title: '저장한 사람 추가', items: items });
+      return;
+    }
+    (p ? p.people : []).filter(function (y) { return y.kind === g.kind; }).forEach(function (y) {
+      items.push({ label: y.name, sub: describe(y), svg: 'user', action: function () { fillGroup(g, y); toast(y.name + ' 정보를 채웠어요'); } });
+    });
+    items.push({ label: '지금 입력한 ' + (g.kind === 'person' ? '상대' : KIND[g.kind].label) + ' 저장하기', sub: '이 기기에만 저장돼요 · 최대 10개', svg: 'save',
+      action: function () { saveOther(g.kind, readGroup(g)); } });
+    openSheet({ title: '저장한 ' + KIND[g.kind].label, items: items });
+  }
+
+  function mountPickers(cfg) {
+    cfg.groups.forEach(function (g) {
+      var b = d.createElement('button');
+      b.type = 'button';
+      b.className = 'yy-pick';
+      b.innerHTML = svg(g.role === 'group' ? 'plus' : 'user') + '<span>' + (g.role === 'me' ? '내 정보' : g.role === 'group' ? '저장한 사람' : '저장한 ' + KIND[g.kind].label) + '</span>';
+      b.addEventListener('click', function () { openPicker(g); });
+      if (g.before) {
+        var anchor = d.querySelector(g.before);
+        if (!anchor) return;
+        var row = d.createElement('div');
+        row.className = 'yy-pickrow';
+        row.appendChild(b);
+        anchor.parentNode.insertBefore(row, anchor);
+        return;
+      }
+      var list = [].slice.call(d.querySelectorAll(g.into[0]));
+      var host = typeof g.into[1] === 'number' ? list[g.into[1]] : list.filter(function (x) { return x.textContent.indexOf(g.into[1]) >= 0; })[0];
+      if (!host) return;
+      host.classList.add('yy-pick-host');
+      host.appendChild(b);
+    });
+  }
+
+  function autofill(cfg) {
+    var p = pload();
+    if (!p) return;
+    cfg.groups.forEach(function (g) {
+      if (g.role === 'me' && p.me) {
+        var own = false;
+        try { own = !!(g.stored && localStorage.getItem(g.stored)); } catch (e) { own = false; }
+        var fromQuery = g.query && new RegExp('[?&]' + g.query + '=').test(location.search);
+        if (!own && !fromQuery) fillGroup(g, p.me);
+      }
+      if (g.role === 'other' && g.autofill) {
+        var y = p.people.filter(function (z) { return z.kind === g.kind; })[0];
+        if (y) fillGroup(g, y);
+      }
+    });
+  }
+
+  function runFromMe(cfg) {
+    if (location.hash !== '#me') return;
+    history.replaceState(history.state, '', location.pathname + location.search);
+    var p = pload();
+    if (!p || !p.me || !cfg.run || typeof window[cfg.run] !== 'function') return;
+    fillGroup(cfg.groups[0], p.me);
+    setTimeout(function () { window[cfg.run](); }, 60);
+  }
+
+  /* 기존 '이 기기에 입력값 저장'을 켠 채 결과를 보면 내 정보도 함께 맞춰 둔다(사용자가 저장을 고른 경우만) */
+  function profileOnResult(el) {
+    var cfg = FORMS[PAGE], box = byId('saveLocal');
+    if (!cfg || !box || !box.checked) return;
+    if (PAGE === '/saju.html' && el.id === 'chartResult') {
+      var x = readSaju(), last = window.__chartPage && window.__chartPage.last && window.__chartPage.last();
+      if (last && last.input) x.solarDate = last.input.solarDate;
+      saveMe(x, true);
+    } else if (PAGE === '/match.html' && el.id === 'result') {
+      saveMe(readGroup(cfg.groups[0]), true);
+      saveOther('person', readGroup(cfg.groups[1]), true);
+    }
+  }
+
+  function renderProfileViews() {
+    var p = pload(), me = p && p.me, ppl = p ? p.people : [];
+    var box = byId('yyProfile');
+    if (box) {
+      var h = '<h2>내 정보</h2><div class="yy-list">';
+      if (me) {
+        h += '<div class="yy-row"><span class="yy-ico"><img src="/assets/icons3d/crystal_ball.png" alt=""></span><span class="yy-row-t"><b>' + esc(me.name || '나') + '</b><small>' + esc(describe(me)) + '</small></span>' +
+          '<button type="button" class="yy-mini" data-yy-del="me" aria-label="내 정보 지우기">' + svg('trash') + '</button></div>' +
+          '<div class="yy-row-actions"><a class="yy-chipbtn" href="/saju.html#me">내 사주 풀이</a><a class="yy-chipbtn" href="/today.html#me">오늘운</a></div>';
+      } else {
+        h += '<a class="yy-row" href="/saju.html"><span class="yy-ico"><img src="/assets/icons3d/crystal_ball.png" alt=""></span><span class="yy-row-t"><b>내 정보를 저장해 보세요</b>' +
+          '<small>한 번 저장하면 사주·궁합·오늘운에 자동으로 채워져요</small></span>' + svg('next') + '</a>';
+      }
+      h += '</div>';
+      if (ppl.length) {
+        h += '<h2 class="yy-sub2">저장한 사람 · 반려동물</h2><div class="yy-list">' + ppl.map(function (y) {
+          return '<div class="yy-row"><span class="yy-ico"><img src="/assets/icons3d/' + KIND[y.kind].img + '.png" alt=""></span><span class="yy-row-t"><b>' + esc(y.name) + '</b><small>' +
+            esc(KIND[y.kind].label + ' · ' + describe(y)) + '</small></span><button type="button" class="yy-mini" data-yy-del="' + esc(y.id) + '" aria-label="' + esc(y.name) + ' 지우기">' + svg('trash') + '</button></div>';
+        }).join('') + '</div>';
+      }
+      if (me || ppl.length) h += '<button type="button" class="yy-textbtn" data-yy-del="all">이 기기에 저장한 정보 모두 지우기</button>';
+      h += '<p class="yy-note">생년월일은 이 기기의 브라우저에만 저장되고 서버로 보내지 않아요.</p>';
+      box.innerHTML = h;
+      box.hidden = false;
+    }
+    var home = byId('yyHomeMe');
+    if (home) {
+      home.hidden = !me;
+      home.innerHTML = me ? '<div class="yy-mecard"><div class="yy-mecard-t"><small>내 정보</small><b>' + esc(me.name || '나') + '</b><span>' + esc(describe(me)) + '</span></div>' +
+        '<div class="yy-mecard-a"><a href="/saju.html#me">내 사주 풀이</a><a href="/today.html#me">오늘운</a></div></div>' : '';
+    }
+  }
+
+  d.addEventListener('click', function (e) {
+    var del = closest(e.target, '[data-yy-del]');
+    if (!del) return;
+    var key = del.getAttribute('data-yy-del');
+    openSheet({ title: key === 'all' ? '저장한 정보를 모두 지울까요?' : '이 정보를 지울까요?', items: [{ label: '지우기', sub: '이 기기에서만 지워져요', svg: 'trash', action: function () {
+      var p = pload();
+      if (!p) return;
+      if (key === 'all') pclear();
+      else {
+        if (key === 'me') p.me = null; else p.people = p.people.filter(function (y) { return y.id !== key; });
+        if (!p.me && !p.people.length) pclear(); else psave(p);
+      }
+      renderProfileViews();
+      toast('지웠어요');
+    } }] });
+  });
+
+  (function initProfile() {
+    var cfg = FORMS[PAGE];
+    if (cfg) { mountPickers(cfg); autofill(cfg); runFromMe(cfg); }
+    renderProfileViews();
+  })();
+
+  window.YYShell = { openResult: openResult, closeResult: closeResult, openSheet: openSheet, closeSheet: closeSheet, toast: toast };
+  window.YYProfile = { get: pload, clear: function () { pclear(); renderProfileViews(); } };
 })();
