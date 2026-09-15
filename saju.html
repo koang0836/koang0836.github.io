@@ -193,9 +193,9 @@
   
 
   <section class="hero">
-    <div class="eyebrow">FREE SAJU · 쉬운 사주 풀이</div>
+    <div class="eyebrow">무료 · 쉬운 사주 풀이</div>
     <h1>내 사주, 쉽게 풀어 보기</h1>
-    <p>생년월일과 태어난 시간만 넣으면 타고난 성격과 일·돈·연애·결혼·사업·건강 경향, 올해 운세와 10년 흐름을 쉬운 말로 알려 드려요. 한자와 전문 용어는 맨 아래 ‘사주 원국 자세히 보기’에 모아 두었어요.</p>
+    <p>생년월일과 태어난 시간만 넣으면 타고난 성격과 일·돈·연애·결혼·사업·건강 경향, 올해 운세와 10년 흐름을 쉬운 말로 알려 드려요. 한자와 전문 용어는 맨 아래 ‘사주 여덟 글자 자세히 보기’에 모아 두었어요.</p>
     <div class="badgeRow">
       <span class="badge">한자 몰라도 OK</span><span class="badge">음력·윤달 입력</span>
       <span class="badge">브라우저 안에서만 계산</span><span class="badge">무료</span>
@@ -287,7 +287,7 @@
     </section>
 
     <details id="expert" class="expert" data-yy-chip="원국">
-      <summary><b>사주 원국 자세히 보기</b><span>한자 원국표 · 십신 · 오행 개수 · 합충 · 대운표 — 사주를 공부한 분을 위한 전문 정보</span></summary>
+      <summary><b>사주 여덟 글자 자세히 보기</b><span>한자 원국표 · 십신 · 오행 개수 · 합충 · 대운표 — 사주를 공부한 분을 위한 전문 정보</span></summary>
       <div class="expertBody">
         <section class="card pad">
           <div class="chartHead">
@@ -337,12 +337,12 @@
 
     <div class="sectionTitle"><h2>공유</h2><span>생년월일은 담지 않습니다</span></div>
     <section class="card pad" style="text-align:center">
-      <p class="caveat" style="margin:0 0 12px">카드에는 일주와 한 줄 캐릭터, 오행 분포만 들어갑니다. 생년월일·출생시간·원국 여덟 글자는 넣지 않습니다.</p>
+      <p class="caveat" style="margin:0 0 12px">카드에는 일주와 한 줄 캐릭터, 오행 분포만 들어갑니다. 생년월일·출생시간·사주 여덟 글자는 넣지 않습니다.</p>
       <button class="btn" onclick="downloadChartCard()">4:5 공유 카드 저장</button>
     </section>
 
     <div class="ad-shell" data-ad-placement="chartResult" hidden></div>
-    <div class="notice">원국 계산은 절기 시각 기준 만세력 라이브러리와 연결운 규칙표로 이뤄지며, 풀이는 명리학의 여러 관점을 단순화한 오락·참고용 콘텐츠입니다. 미래·건강·재정·관계 결정을 대신하지 않으며, 건강 관련 문장은 생활 습관 참고용일 뿐 의학적 판단이 아닙니다.</div>
+    <div class="notice">사주 여덟 글자는 음력과 계절이 바뀌는 시점까지 따져 정확하게 계산하고, 풀이는 여러 사주 해석을 쉬운 말로 간추린 거예요. 재미와 참고로 즐겨 주시고, 건강·돈·관계처럼 중요한 결정은 풀이보다 내 판단과 전문가의 도움을 믿어 주세요. 건강 이야기는 생활 습관 팁일 뿐 진단이 아니에요.</div>
   </main>
 
   <div id="premiumModal" class="modalBack" onclick="closePremium(event)">
@@ -365,8 +365,8 @@
 </div>
 
 <script src="/assets/vendor/lunar.min.js?v=c256d829"></script>
-<script src="/assets/platform.js?v=05a4bb6e"></script>
-<script src="/assets/saju_data.js?v=9cc2798e"></script>
+<script src="/assets/platform.js?v=f5ea89e1"></script>
+<script src="/assets/saju_data.js?v=491fec12"></script>
 <script src="/assets/chart.js?v=2e2ae368"></script>
 <script src="/config.js?v=6c6a2944"></script>
 <script>
@@ -844,7 +844,7 @@
 
   /* ── 공개 핸들러 ─────────────────────────────────────────────── */
   window.runChart = function () {
-    if (!window.YY || typeof YY.chart !== 'function') return showError('계산 엔진을 불러오지 못했습니다. 새로고침해 주세요.');
+    if (!window.YY || typeof YY.chart !== 'function') return showError('계산 준비가 아직 덜 끝났어요. 새로고침해 주세요.');
     if (!$('timeUnknown').checked && !$('birthTime').value) return showError('출생시간을 입력하거나 ‘모름’에 체크해 주세요.');
     var input = readInput(), c;
     try {
@@ -911,7 +911,7 @@
   sync();
   document.querySelectorAll('input[name="cal"]').forEach(function (el) { el.addEventListener('change', sync); });
   $('timeUnknown').addEventListener('change', sync);
-  if (!window.YY || typeof YY.chart !== 'function' || !D.tenGod || !D.easy) showError('계산 엔진을 불러오지 못했습니다. 새로고침해 주세요.');
+  if (!window.YY || typeof YY.chart !== 'function' || !D.tenGod || !D.easy) showError('계산 준비가 아직 덜 끝났어요. 새로고침해 주세요.');
 })();
 </script>
 <script src="/ads.js?v=7d6935ae"></script>
