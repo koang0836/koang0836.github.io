@@ -234,7 +234,7 @@
       <div class="field">
         <label for="birthTime">출생시간</label>
         <div class="timeRow">
-          <input id="birthTime" type="time" value="12:00">
+          <input id="birthTime" type="time">
           <label class="check"><input type="checkbox" id="timeUnknown"><span>모름</span></label>
         </div>
         <div class="hint">모르면 ‘모름’에 체크하세요. 태어난 시간 글자는 비워 두고 계산해요.</div>
@@ -442,9 +442,13 @@
   function hideError() { $('formError').classList.remove('show'); }
 
   /* ── 입력 ─────────────────────────────────────────────────── */
-  function fillSelect(el, from, to, suffix, selected) {
-    var html = '';
-    for (var v = from; v <= to; v++) html += '<option value="' + v + '"' + (v === selected ? ' selected' : '') + '>' + v + suffix + '</option>';
+  /* 처음에는 비워 둔다(맨 위 '년·월·일' 자리표시). desc 면 큰 수부터 — 출생 연도는 최근 해가 위에 오게 */
+  function fillSelect(el, from, to, suffix, desc) {
+    var html = '<option value="">' + suffix + '</option>';
+    for (var i = 0; i <= to - from; i++) {
+      var v = desc ? to - i : from + i;
+      html += '<option value="' + v + '">' + v + suffix + '</option>';
+    }
     el.innerHTML = html;
   }
   function checked(name) { return document.querySelector('input[name="' + name + '"]:checked').value; }
@@ -845,6 +849,7 @@
   /* ── 공개 핸들러 ─────────────────────────────────────────────── */
   window.runChart = function () {
     if (!window.YY || typeof YY.chart !== 'function') return showError('계산 준비가 아직 덜 끝났어요. 새로고침해 주세요.');
+    if (!$('by').value || !$('bm').value || !$('bd').value) return showError('생년월일을 골라 주세요.');
     if (!$('timeUnknown').checked && !$('birthTime').value) return showError('출생시간을 입력하거나 ‘모름’에 체크해 주세요.');
     var input = readInput(), c;
     try {
@@ -904,9 +909,9 @@
   /* 자동 테스트에서 화면 상태를 확인할 때 쓴다 */
   window.__chartPage = { drawCard: drawCard, last: function () { return last; } };
 
-  fillSelect($('by'), 1900, 2100, '년', 1994);
-  fillSelect($('bm'), 1, 12, '월', 2);
-  fillSelect($('bd'), 1, 31, '일', 16);
+  fillSelect($('by'), 1900, new Date().getFullYear(), '년', true);
+  fillSelect($('bm'), 1, 12, '월');
+  fillSelect($('bd'), 1, 31, '일');
   restore();
   sync();
   document.querySelectorAll('input[name="cal"]').forEach(function (el) { el.addEventListener('change', sync); });
