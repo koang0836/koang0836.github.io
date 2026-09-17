@@ -237,7 +237,7 @@
           <input id="birthTime" type="time">
           <label class="check"><input type="checkbox" id="timeUnknown"><span>모름</span></label>
         </div>
-        <div class="hint">모르면 ‘모름’에 체크하세요. 태어난 시간 글자는 비워 두고 계산해요.</div>
+        <div class="hint">모르면 그냥 비워 두세요. 태어난 시간 글자는 빼고 계산해요.</div>
       </div>
     </div>
     <div class="saveRow"><label class="check"><input type="checkbox" id="saveLocal"><span>이 기기에 입력값 저장</span></label></div>
@@ -635,22 +635,22 @@
   function renderWarnings(c) {
     var items = c.warnings.map(function (w) {
       if (w.type === 'jieqi') {
-        return '<b>절기 경계에 태어났어요</b> — 출생 시각이 <b>' + w.name + '</b>(' + w.at + ')에서 ' + w.hoursAway + '시간 떨어져 있습니다. ' +
+        return '<b>절기 경계에 태어났어요</b> — 출생 시각이 <b>' + w.name + '</b>(' + w.at + ')에서 ' + w.hoursAway + '시간 떨어져 있어요. ' +
           (w.affects.indexOf('년주') >= 0 ? '태어난 해와 달의 글자' : '태어난 달의 글자') + '가 바뀌는 경계라 ' +
-          (c.input.hasTime ? '출생 시각이 조금만 달라도 풀이가 달라질 수 있습니다.' : '출생시간을 모르면 확정할 수 없습니다.');
+          (c.input.hasTime ? '출생 시각이 조금만 달라도 풀이가 달라질 수 있어요.' : '출생시간을 모르면 확정하기 어려워요.');
       }
       if (w.type === 'hour_boundary') {
-        return '<b>시간 경계에 태어났어요</b> — 출생 시각이 ' + w.boundary + '에서 ' + w.minutesAway + '분 거리입니다. ' +
-          '서울 기준 경도 보정(약 32분)을 적용하는 만세력에서는 시주가 <b>' + gz(w.altHour) + '</b>' +
-          (w.altDay !== c.pillars.day ? ', 일주가 <b>' + gz(w.altDay) + '</b>' : '') + '로 나올 수 있습니다.';
+        return '<b>시간 경계에 태어났어요</b> — 출생 시각이 ' + w.boundary + '에서 ' + w.minutesAway + '분 거리예요. ' +
+          '서울 기준으로 경도를 보정해 계산하는 곳에서는 태어난 시간 글자가 <b>' + gz(w.altHour) + '</b>' +
+          (w.altDay !== c.pillars.day ? ', 태어난 날 글자가 <b>' + gz(w.altDay) + '</b>' : '') + '로 나올 수 있어요.';
       }
       if (w.type === 'late_night') {
-        return '<b>밤 11시대 출생</b> — 이 사이트는 23시 이후 출생을 다음 날(<b>' + gz(c.pillars.day) + '</b>일주)로 계산합니다. ' +
-          '보는 방식에 따라 당일(<b>' + gz(w.altDay) + '</b>일주)로 보기도 합니다.';
+        return '<b>밤 11시대에 태어났어요</b> — 이 사이트는 밤 11시 이후에 태어난 경우 다음 날(<b>' + gz(c.pillars.day) + '</b>)로 계산해요. ' +
+          '보는 방식에 따라 당일(<b>' + gz(w.altDay) + '</b>)로 보기도 해요.';
       }
       if (w.type === 'time_unknown') {
-        return '<b>출생시간 모름</b> — 태어난 시간 글자를 비워 두고 계산했어요. 풀이는 나머지 글자로만 했고, 10년 운이 시작되는 시점은 몇 달 어긋날 수 있습니다. ' +
-          '밤 11시 이후 출생이라면 풀이가 달라질 수 있습니다.';
+        return '<b>출생시간 모름</b> — 태어난 시간 글자를 비워 두고 계산했어요. 나머지 글자로 풀이했고, 10년 운이 시작되는 시점은 몇 달 어긋날 수 있어요. ' +
+          '밤 11시 이후에 태어났다면 풀이가 달라질 수 있어요.';
       }
       return '';
     }).filter(Boolean);
@@ -850,7 +850,6 @@
   window.runChart = function () {
     if (!window.YY || typeof YY.chart !== 'function') return showError('계산 준비가 아직 덜 끝났어요. 새로고침해 주세요.');
     if (!$('by').value || !$('bm').value || !$('bd').value) return showError('생년월일을 골라 주세요.');
-    if (!$('timeUnknown').checked && !$('birthTime').value) return showError('출생시간을 입력하거나 ‘모름’에 체크해 주세요.');
     var input = readInput(), c;
     try {
       c = YY.chart(input);
